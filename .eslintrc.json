@@ -1,8 +1,16 @@
 {
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
+        "extraFileExtensions": [".mjs"],
+        "project": "./tsconfig.eslint.json",
         "sourceType": "module",
-        "ecmaVersion": 2018
+        "ecmaVersion": 2020,
+        "warnOnUnsupportedTypeScriptVersion": false
     },
     "env": {
         "node": true,
@@ -17,10 +25,30 @@
         "prefer-destructuring": 1,
         "require-unicode-regexp": 1,
         "no-return-await": 1,
+        "no-trailing-spaces": 1,
         "comma-dangle": ["error", "always-multiline"],
+        "curly": ["error", "all"],
+        "padded-blocks": ["error", "never", {"allowSingleLineBlocks": false}],
         "indent": ["error", 4, {"SwitchCase": 1}],
         "handle-callback-err": ["error"],
         "no-multi-spaces": ["error"],
+        "object-curly-spacing": ["error", "always"],
+        "array-bracket-spacing": ["error", "never"],
+        "lines-between-class-members": ["error", "always"],
+        "quotes": "off",
+        "@typescript-eslint/quotes": ["error", "single", { "allowTemplateLiterals": true }],
+        "@typescript-eslint/no-explicit-any": "off",
+        "padding-line-between-statements": [
+            "error",
+            {"blankLine": "always", "prev": "*", "next": "return"},
+            {"blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
+            {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]},
+            {"blankLine": "always", "prev": "directive", "next": "*" },
+            {"blankLine": "any", "prev": "directive", "next": "directive"},
+            {"blankLine": "always", "prev": ["case", "default"], "next": "*" },
+            {"blankLine": "always", "prev": ["block", "if", "for", "try"], "next": "*" },
+            {"blankLine": "always", "prev": "*", "next": ["block", "if", "for", "try"] }
+        ],
         "jsdoc/check-access": 1,
         "jsdoc/check-alignment": 1,
         "jsdoc/check-line-alignment": 1,
