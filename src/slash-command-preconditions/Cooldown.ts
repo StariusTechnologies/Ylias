@@ -1,0 +1,79 @@
+import { RateLimitManager } from '@sapphire/ratelimits';
+import type { Interaction } from 'discord.js';
+import { BucketScope } from '@sapphire/framework';
+import { Identifiers } from '../models/framework/lib/errors/Identifiers';
+import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
+import {
+    SlashCommandPrecondition,
+    SlashCommandPreconditionContext,
+    SlashCommandPreconditionResult
+} from '../models/framework/lib/structures/SlashCommandPrecondition';
+
+export interface SlashCommandCooldownContext extends SlashCommandPreconditionContext {
+    scope?: BucketScope;
+    delay: number;
+    limit?: number;
+}
+
+export class CorePrecondition extends SlashCommandPrecondition {
+    public buckets = new WeakMap<SlashCommand, RateLimitManager<string>>();
+
+    public run(
+        interaction: Interaction,
+        command: SlashCommand,
+        context: SlashCommandCooldownContext
+    ): SlashCommandPreconditionResult {
+        // If the command it is testing for is not this one, return ok:
+        if (context.external) {
+            return this.ok();
+        }
+
+        // If there is no delay (undefined, null, 0), return ok:
+        if (!context.delay) {
+            return this.ok();
+        }
+
+        const ratelimit = this.getManager(command, context).acquire(this.getId(interaction, context));
+
+        if (ratelimit.limited) {
+            const remaining = ratelimit.remainingTime;
+
+            return this.error({
+                identifier: Identifiers.SlashCommandPreconditionCooldown,
+                message: `You have just used this command. Try again in ${Math.ceil(remaining / 1000)} second${remaining > 1000 ? 's' : ''}.`,
+                context: { remaining },
+            });
+        }
+
+        ratelimit.consume();
+
+        return this.ok();
+    }
+
+    private getId(interaction: Interaction, context: SlashCommandCooldownContext) {
+        switch (context.scope) {
+            case BucketScope.Global:
+                return 'global';
+
+            case BucketScope.Channel:
+                return interaction.channel.id;
+
+            case BucketScope.Guild:
+                return interaction.guild?.id ?? interaction.channel.id;
+
+            default:
+                return interaction.user.id;
+        }
+    }
+
+    private getManager(command: SlashCommand, context: SlashCommandCooldownContext) {
+        let manager = this.buckets.get(command);
+
+        if (!manager) {
+            manager = new RateLimitManager(context.delay, context.limit);
+            this.buckets.set(command, manager);
+        }
+
+        return manager;
+    }
+}

@@ -1,6 +1,6 @@
-import { Interaction } from 'discord.js';
+import { CommandInteraction, Message } from 'discord.js';
 import { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/SlashCommand';
+import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 
 export default class PingCommand extends SlashCommand {
     constructor(context: PieceContext) {
@@ -10,10 +10,10 @@ export default class PingCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: Interaction): Promise<void> {
-        const response = await interaction.channel.send('Ping...');
+    async run(interaction: CommandInteraction): Promise<void> {
+        const response = await interaction.reply({ content: 'Ping...', fetchReply: true }) as Message;
         const latency = response.createdTimestamp - interaction.createdTimestamp;
 
-        await response.edit(`Pong! Took me ${latency}ms.`);
+        await interaction.editReply(`Pong! Took me ${latency}ms.`);
     }
 }

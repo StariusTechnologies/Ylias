@@ -1,10 +1,29 @@
+import { join } from 'path';
 import { Intents } from 'discord.js';
-import { SapphireClient } from '@sapphire/framework';
+import {
+    ArgumentStore,
+    CommandStore,
+    ListenerStore,
+    PreconditionStore,
+    SapphireClient
+} from '@sapphire/framework';
 import { config as configureEnvironment } from 'dotenv';
 import Logger from '@lilywonhalf/pretty-logger';
-import SlashCommandStore from './models/SlashCommandStore';
+import SlashCommandStore from './models/framework/lib/structures/SlashCommandStore';
+import { SlashCommandPreconditionStore } from './models/framework/lib/structures/SlashCommandPreconditionStore';
 
 configureEnvironment();
+
+declare module '@sapphire/pieces' {
+    interface StoreRegistryEntries {
+        arguments: ArgumentStore;
+        commands: CommandStore;
+        'slash-commands': SlashCommandStore;
+        listeners: ListenerStore;
+        preconditions: PreconditionStore;
+        'slash-command-preconditions': SlashCommandPreconditionStore;
+    }
+}
 
 const intents = [
     Intents.FLAGS.GUILDS,
@@ -27,5 +46,8 @@ const client = new SapphireClient({
     defaultPrefix: '.',
 });
 
+client.stores.registerPath(join(__dirname, 'models', 'framework', 'errorListeners'));
 client.stores.register(new SlashCommandStore());
+client.stores.register(new SlashCommandPreconditionStore());
+
 client.login(process.env.TOKEN).catch(Logger.exception);

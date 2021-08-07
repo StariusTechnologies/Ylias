@@ -4,15 +4,17 @@ import { Interaction, PermissionResolvable, Permissions, CommandInteractionOptio
 import {
     CommandOptionsRunType,
     CommandPreConditions,
-    BucketScope,
-    PreconditionContainerArray,
-    PreconditionEntryResolvable,
+    BucketScope
 } from '@sapphire/framework';
+import {
+    SlashCommandPreconditionContainerArray,
+    SlashCommandPreconditionEntryResolvable
+} from '../utils/SlashCommandPreconditionContainerArray';
 
 export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends AliasPiece {
     public description: string;
 
-    public preconditions: PreconditionContainerArray;
+    public preconditions: SlashCommandPreconditionContainerArray;
 
     public detailedDescription: string;
 
@@ -34,7 +36,7 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
             this.aliases = [...this.aliases, ...dashLessAliases];
         }
 
-        this.preconditions = new PreconditionContainerArray();
+        this.preconditions = new SlashCommandPreconditionContainerArray(options.preconditions);
         this.parseConstructorPreConditions(options);
     }
 
@@ -89,7 +91,9 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
         }
     }
 
-    private resolveConstructorPreConditionsRunType(runIn: SlashCommandOptions['runIn']): PreconditionContainerArray | CommandPreConditions | null {
+    private resolveConstructorPreConditionsRunType(
+        runIn: SlashCommandOptions['runIn']
+    ): SlashCommandPreconditionContainerArray | CommandPreConditions | null {
         if (isNullish(runIn)) {
             return null;
         }
@@ -153,7 +157,7 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
             return CommandPreConditions.GuildThreadOnly;
         }
 
-        const preconditions = new PreconditionContainerArray();
+        const preconditions = new SlashCommandPreconditionContainerArray();
 
         if (dm) {
             preconditions.append(CommandPreConditions.DirectMessageOnly);
@@ -194,7 +198,7 @@ export interface SlashCommandOptions extends AliasPieceOptions {
 
     detailedDescription?: string;
 
-    preconditions?: readonly PreconditionEntryResolvable[];
+    preconditions?: readonly SlashCommandPreconditionEntryResolvable[];
 
     nsfw?: boolean;
 
