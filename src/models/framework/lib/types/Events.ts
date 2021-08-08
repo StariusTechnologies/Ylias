@@ -1,4 +1,4 @@
-import { CommandInteractionOptionResolver, Constants, Interaction } from 'discord.js';
+import { CommandInteractionOptionResolver, Constants, CommandInteraction } from 'discord.js';
 import type {
     UserError
 } from '@sapphire/framework';
@@ -87,7 +87,7 @@ export const Events = {
 };
 
 export interface UnknownSlashCommandNamePayload {
-    interaction: Interaction;
+    interaction: CommandInteraction;
 }
 
 export interface UnknownSlashCommandPayload extends UnknownSlashCommandNamePayload {
@@ -95,7 +95,7 @@ export interface UnknownSlashCommandPayload extends UnknownSlashCommandNamePaylo
 }
 
 export interface ISlashCommandPayload {
-    interaction: Interaction;
+    interaction: CommandInteraction;
     command: SlashCommand;
 }
 
@@ -142,11 +142,15 @@ declare module 'discord.js' {
         [Events.PreSlashCommandRun]: [payload: PreSlashCommandRunPayload];
         [Events.SlashCommandDenied]: [error: UserError, payload: SlashCommandDeniedPayload];
         [Events.SlashCommandAccepted]: [payload: SlashCommandAcceptedPayload];
-        [Events.SlashCommandRun]: [interaction: Interaction, command: SlashCommand, payload: SlashCommandRunPayload];
+        [Events.SlashCommandRun]: [
+            interaction: CommandInteraction,
+            command: SlashCommand,
+            payload: SlashCommandRunPayload
+        ];
         [Events.SlashCommandSuccess]: [payload: SlashCommandSuccessPayload];
         [Events.SlashCommandError]: [error: Error, payload: SlashCommandErrorPayload];
         [Events.SlashCommandFinish]: [
-            interaction: Interaction,
+            interaction: CommandInteraction,
             command: SlashCommand,
             payload: SlashCommandFinishPayload
         ];

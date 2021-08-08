@@ -1,5 +1,5 @@
 import { RateLimitManager } from '@sapphire/ratelimits';
-import type { Interaction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import { BucketScope } from '@sapphire/framework';
 import { Identifiers } from '../models/framework/lib/errors/Identifiers';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
@@ -19,7 +19,7 @@ export class CorePrecondition extends SlashCommandPrecondition {
     public buckets = new WeakMap<SlashCommand, RateLimitManager<string>>();
 
     public run(
-        interaction: Interaction,
+        interaction: CommandInteraction,
         command: SlashCommand,
         context: SlashCommandCooldownContext
     ): SlashCommandPreconditionResult {
@@ -50,16 +50,16 @@ export class CorePrecondition extends SlashCommandPrecondition {
         return this.ok();
     }
 
-    private getId(interaction: Interaction, context: SlashCommandCooldownContext) {
+    private getId(interaction: CommandInteraction, context: SlashCommandCooldownContext) {
         switch (context.scope) {
             case BucketScope.Global:
                 return 'global';
 
             case BucketScope.Channel:
-                return interaction.channel.id;
+                return interaction.channelId;
 
             case BucketScope.Guild:
-                return interaction.guild?.id ?? interaction.channel.id;
+                return interaction.guild?.id ?? interaction.channelId;
 
             default:
                 return interaction.user.id;

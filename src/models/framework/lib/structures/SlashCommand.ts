@@ -1,15 +1,14 @@
 import { AliasPiece, PieceContext, PieceOptions } from '@sapphire/pieces';
 import { Awaited, isNullish } from '@sapphire/utilities';
 import {
-    Interaction,
+    CommandInteraction,
     PermissionResolvable,
-    Permissions,
     CommandInteractionOptionResolver,
     ApplicationCommandOptionData,
+    ApplicationCommandPermissionData
 } from 'discord.js';
 import {
     CommandOptionsRunType,
-    CommandPreConditions,
     BucketScope
 } from '@sapphire/framework';
 import {
@@ -22,18 +21,22 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
     public preconditions: SlashCommandPreconditionContainerArray;
     public detailedDescription: string;
     public arguments: ApplicationCommandOptionData[];
+    public guildCommand: boolean;
+    public permissions: ApplicationCommandPermissionData[];
 
     protected constructor(context: PieceContext, options: SlashCommandOptions = {}) {
         super(context, { ...options, name: (options.name ?? context.name).toLowerCase() });
         this.description = options.description ?? '';
         this.detailedDescription = options.detailedDescription ?? '';
         this.arguments = options.arguments ?? [];
+        this.guildCommand = options.permissions?.length > 0 ? true : options.guildCommand as boolean;
+        this.permissions = options.permissions ?? [];
 
         this.preconditions = new SlashCommandPreconditionContainerArray(options.preconditions);
         this.parseConstructorPreConditions(options);
     }
 
-    public abstract run(interaction: Interaction, args: T, context: SlashCommandContext): Awaited<unknown>;
+    public abstract run(interaction: CommandInteraction, args: T, context: SlashCommandContext): Awaited<unknown>;
 
     public toJSON(): Record<string, any> {
         return {
@@ -46,13 +49,12 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
     protected parseConstructorPreConditions(options: SlashCommandOptions): void {
         this.parseConstructorPreConditionsRunIn(options);
         this.parseConstructorPreConditionsNsfw(options);
-        this.parseConstructorPreConditionsRequiredClientPermissions(options);
         this.parseConstructorPreConditionsCooldown(options);
     }
 
     protected parseConstructorPreConditionsNsfw(options: SlashCommandOptions): void {
         if (options.nsfw) {
-            this.preconditions.append(CommandPreConditions.NotSafeForWork);
+            this.preconditions.append(SlashCommandPreConditions.NotSafeForWork);
         }
     }
 
@@ -64,21 +66,13 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
         }
     }
 
-    protected parseConstructorPreConditionsRequiredClientPermissions(options: SlashCommandOptions): void {
-        const permissions = new Permissions(options.requiredClientPermissions);
-
-        if (permissions.bitfield !== 0n) {
-            this.preconditions.append({ name: CommandPreConditions.Permissions, context: { permissions } });
-        }
-    }
-
     protected parseConstructorPreConditionsCooldown(options: SlashCommandOptions): void {
         const limit = options.cooldownLimit ?? 1;
         const delay = options.cooldownDelay ?? 0;
 
         if (limit && delay) {
             this.preconditions.append({
-                name: CommandPreConditions.Cooldown,
+                name: SlashCommandPreConditions.Cooldown,
                 context: { scope: options.cooldownScope ?? BucketScope.User, limit, delay },
             });
         }
@@ -86,7 +80,7 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
 
     private resolveConstructorPreConditionsRunType(
         runIn: SlashCommandOptions['runIn']
-    ): SlashCommandPreconditionContainerArray | CommandPreConditions | null {
+    ): SlashCommandPreconditionContainerArray | SlashCommandPreConditions | null {
         if (isNullish(runIn)) {
             return null;
         }
@@ -94,25 +88,25 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
         if (typeof runIn === 'string') {
             switch (runIn) {
                 case 'DM':
-                    return CommandPreConditions.DirectMessageOnly;
+                    return SlashCommandPreConditions.DirectMessageOnly;
 
                 case 'GUILD_TEXT':
-                    return CommandPreConditions.GuildTextOnly;
+                    return SlashCommandPreConditions.GuildTextOnly;
 
                 case 'GUILD_NEWS':
-                    return CommandPreConditions.GuildNewsOnly;
+                    return SlashCommandPreConditions.GuildNewsOnly;
 
                 case 'GUILD_NEWS_THREAD':
-                    return CommandPreConditions.GuildNewsThreadOnly;
+                    return SlashCommandPreConditions.GuildNewsThreadOnly;
 
                 case 'GUILD_PUBLIC_THREAD':
-                    return CommandPreConditions.GuildPublicThreadOnly;
+                    return SlashCommandPreConditions.GuildPublicThreadOnly;
 
                 case 'GUILD_PRIVATE_THREAD':
-                    return CommandPreConditions.GuildPrivateThreadOnly;
+                    return SlashCommandPreConditions.GuildPrivateThreadOnly;
 
                 case 'GUILD_ANY':
-                    return CommandPreConditions.GuildOnly;
+                    return SlashCommandPreConditions.GuildOnly;
 
                 default:
                     return null;
@@ -147,36 +141,36 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
 
         // If runs in any thread, optimise to thread-only:
         if (guildThreads && keys.size === 3) {
-            return CommandPreConditions.GuildThreadOnly;
+            return SlashCommandPreConditions.GuildThreadOnly;
         }
 
         const preconditions = new SlashCommandPreconditionContainerArray();
 
         if (dm) {
-            preconditions.append(CommandPreConditions.DirectMessageOnly);
+            preconditions.append(SlashCommandPreConditions.DirectMessageOnly);
         }
 
         if (guild) {
-            preconditions.append(CommandPreConditions.GuildOnly);
+            preconditions.append(SlashCommandPreConditions.GuildOnly);
         } else {
             // GuildText includes PublicThread and PrivateThread
             if (guildText) {
-                preconditions.append(CommandPreConditions.GuildTextOnly);
+                preconditions.append(SlashCommandPreConditions.GuildTextOnly);
             } else {
                 if (guildPublicThread) {
-                    preconditions.append(CommandPreConditions.GuildPublicThreadOnly);
+                    preconditions.append(SlashCommandPreConditions.GuildPublicThreadOnly);
                 }
 
                 if (guildPrivateThread) {
-                    preconditions.append(CommandPreConditions.GuildPrivateThreadOnly);
+                    preconditions.append(SlashCommandPreConditions.GuildPrivateThreadOnly);
                 }
             }
 
             // GuildNews includes NewsThread
             if (guildNews) {
-                preconditions.append(CommandPreConditions.GuildNewsOnly);
+                preconditions.append(SlashCommandPreConditions.GuildNewsOnly);
             } else if (guildNewsThread) {
-                preconditions.append(CommandPreConditions.GuildNewsThreadOnly);
+                preconditions.append(SlashCommandPreConditions.GuildNewsThreadOnly);
             }
         }
 
@@ -184,10 +178,25 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
     }
 }
 
+export const enum SlashCommandPreConditions {
+    Cooldown = 'Cooldown',
+    DirectMessageOnly = 'DMOnly',
+    GuildNewsOnly = 'GuildNewsOnly',
+    GuildNewsThreadOnly = 'GuildNewsThreadOnly',
+    GuildOnly = 'GuildOnly',
+    GuildPrivateThreadOnly = 'GuildPrivateThreadOnly',
+    GuildPublicThreadOnly = 'GuildPublicThreadOnly',
+    GuildTextOnly = 'GuildTextOnly',
+    GuildThreadOnly = 'GuildThreadOnly',
+    NotSafeForWork = 'NSFW'
+}
+
 export interface SlashCommandOptions extends PieceOptions {
     arguments?: ApplicationCommandOptionData[];
     description?: string;
     detailedDescription?: string;
+    guildCommand?: boolean;
+    permissions?: ApplicationCommandPermissionData[];
     preconditions?: readonly SlashCommandPreconditionEntryResolvable[];
     nsfw?: boolean;
     cooldownLimit?: number;

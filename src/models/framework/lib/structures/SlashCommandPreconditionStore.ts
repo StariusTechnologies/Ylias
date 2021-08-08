@@ -1,6 +1,6 @@
 import { Store } from '@sapphire/pieces';
 import { ok } from '@sapphire/framework';
-import type { Interaction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import { SlashCommand } from './SlashCommand';
 import { SlashCommandPrecondition, SlashCommandPreconditionContext, AsyncSlashCommandPreconditionResult } from './SlashCommandPrecondition';
 
@@ -12,7 +12,7 @@ export class SlashCommandPreconditionStore extends Store<SlashCommandPreconditio
     }
 
     public async run(
-        interaction: Interaction,
+        interaction: CommandInteraction,
         slashCommand: SlashCommand,
         context: SlashCommandPreconditionContext = {}
     ): AsyncSlashCommandPreconditionResult {

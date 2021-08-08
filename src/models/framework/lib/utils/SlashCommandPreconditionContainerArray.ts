@@ -1,4 +1,4 @@
-import { Collection, Interaction } from 'discord.js';
+import { Collection, CommandInteraction } from 'discord.js';
 import type { SlashCommand } from '../structures/SlashCommand';
 import type {
     SlashCommandPreconditionContext,
@@ -116,7 +116,7 @@ export class SlashCommandPreconditionContainerArray implements ISlashCommandPrec
     }
 
     public run(
-        interaction: Interaction,
+        interaction: CommandInteraction,
         command: SlashCommand,
         context: SlashCommandPreconditionContext = {}
     ): SlashCommandPreconditionContainerReturn {

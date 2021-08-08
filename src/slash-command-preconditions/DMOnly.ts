@@ -1,4 +1,4 @@
-import type { Interaction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import { Identifiers } from '../models/framework/lib/errors/Identifiers';
 import {
     SlashCommandPrecondition,
@@ -6,7 +6,7 @@ import {
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
 export class CorePrecondition extends SlashCommandPrecondition {
-    public run(interaction: Interaction): SlashCommandPreconditionResult {
+    public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
         return interaction.guild === null
             ? this.ok()
             : this.error({

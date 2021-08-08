@@ -52,6 +52,5 @@ export const enum Identifiers {
 	SlashCommandPreconditionGuildPublicThreadOnly = 'slashCommandPreconditionGuildPublicThreadOnly',
 	SlashCommandPreconditionGuildTextOnly = 'slashCommandPreconditionGuildTextOnly',
 	SlashCommandPreconditionNSFW = 'slashCommandPreconditionNsfw',
-	SlashCommandPreconditionPermissions = 'slashCommandPreconditionPermissions',
 	SlashCommandPreconditionThreadOnly = 'slashCommandPreconditionThreadOnly'
 }

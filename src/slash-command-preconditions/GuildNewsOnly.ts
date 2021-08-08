@@ -1,4 +1,4 @@
-import type { Interaction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import { Identifiers } from '../models/framework/lib/errors/Identifiers';
 import {
     SlashCommandPrecondition,
@@ -6,10 +6,10 @@ import {
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
 export class CorePrecondition extends SlashCommandPrecondition {
-    private readonly allowedTypes: Interaction['channel']['type'][] = ['GUILD_NEWS', 'GUILD_NEWS_THREAD'];
+    private readonly allowedTypes: CommandInteraction['channel']['type'][] = ['GUILD_NEWS', 'GUILD_NEWS_THREAD'];
 
-    public run(interaction: Interaction): SlashCommandPreconditionResult {
-        return this.allowedTypes.includes(interaction.channel.type)
+    public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
+        return this.allowedTypes.includes(interaction.channel?.type)
             ? this.ok()
             : this.error({
                 identifier: Identifiers.PreconditionGuildNewsOnly,

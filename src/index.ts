@@ -1,7 +1,7 @@
 import Logger from '@lilywonhalf/pretty-logger';
 import { Bootstrap } from './models/Bootstrap';
 
-Logger.info('Botting up application...');
+Logger.info('Booting up application...');
 
 const bootstrap = new Bootstrap();
 

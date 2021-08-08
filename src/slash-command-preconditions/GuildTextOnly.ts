@@ -1,4 +1,4 @@
-import type { Interaction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import { Identifiers } from '../models/framework/lib/errors/Identifiers';
 import {
     SlashCommandPrecondition,
@@ -6,14 +6,14 @@ import {
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
 export class CorePrecondition extends SlashCommandPrecondition {
-    private readonly allowedTypes: Interaction['channel']['type'][] = [
+    private readonly allowedTypes: CommandInteraction['channel']['type'][] = [
         'GUILD_TEXT',
         'GUILD_PUBLIC_THREAD',
         'GUILD_PRIVATE_THREAD',
     ];
 
-    public run(message: Interaction): SlashCommandPreconditionResult {
-        return this.allowedTypes.includes(message.channel.type)
+    public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
+        return this.allowedTypes.includes(interaction.channel?.type)
             ? this.ok()
             : this.error({
                 identifier: Identifiers.PreconditionGuildTextOnly,

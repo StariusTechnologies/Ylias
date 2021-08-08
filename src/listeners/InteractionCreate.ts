@@ -23,6 +23,16 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
         const args = interaction.options;
         const commandName = interaction.commandName;
         const command = this.container.stores.get('slash-commands').get(commandName);
+
+        if (!command) {
+            interaction.client.emit(
+                Events.UnknownSlashCommand,
+                { interaction, commandName }
+            );
+
+            return;
+        }
+
         const context = { commandName };
         const payload = { interaction, command, parameters: interaction.options, context: { commandName } };
 

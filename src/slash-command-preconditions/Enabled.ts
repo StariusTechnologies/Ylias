@@ -1,5 +1,5 @@
 import type { PieceContext } from '@sapphire/pieces';
-import type { Interaction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import { Identifiers } from '../models/framework/lib/errors/Identifiers';
 import type { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { SlashCommandPrecondition } from '../models/framework/lib/structures/SlashCommandPrecondition';
@@ -10,7 +10,7 @@ export class CorePrecondition extends SlashCommandPrecondition {
     }
 
     public run(
-        _: Interaction,
+        _: CommandInteraction,
         command: SlashCommand,
         context: SlashCommandPrecondition.Context
     ): SlashCommandPrecondition.Result {

@@ -1,4 +1,4 @@
-import type { Interaction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import type { SlashCommand } from '../../structures/SlashCommand';
 import type {
     SlashCommandPreconditionContext
@@ -7,14 +7,14 @@ import type { ISlashCommandPreconditionContainer, SlashCommandPreconditionContai
 
 export interface ISlashCommandPreconditionCondition {
     sequential(
-        interaction: Interaction,
+        interaction: CommandInteraction,
         command: SlashCommand,
         entries: readonly ISlashCommandPreconditionContainer[],
         context: SlashCommandPreconditionContext
     ): SlashCommandPreconditionContainerReturn;
 
     parallel(
-        interaction: Interaction,
+        interaction: CommandInteraction,
         command: SlashCommand,
         entries: readonly ISlashCommandPreconditionContainer[],
         context: SlashCommandPreconditionContext

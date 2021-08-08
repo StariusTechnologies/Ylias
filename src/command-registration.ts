@@ -2,7 +2,7 @@ import Logger from '@lilywonhalf/pretty-logger';
 import { Bootstrap } from './models/Bootstrap';
 import { SlashCommandRegistrar } from './models/SlashCommandRegistrar';
 
-const needGlobalRegister = process.argv.some(arg => arg.toLowerCase() === 'global');
+const productionMode = process.argv.some(arg => arg.toLowerCase().includes('prod'));
 const bootstrap = new Bootstrap();
 const slashCommandRegistrar = new SlashCommandRegistrar();
 
@@ -14,16 +14,18 @@ bootstrap.initializeClient();
 
         const { client } = bootstrap;
 
+        Logger.info('-----------------------------');
         slashCommandRegistrar.initializeData(client);
 
-        Logger.info('Started refreshing application slash commands for test guild.');
+        Logger.info('-----------------------------');
         await slashCommandRegistrar.testGuildRegister();
-        Logger.info('Successfully reloaded application slash commands for test guild.');
 
-        if (needGlobalRegister) {
-            Logger.info('Started refreshing application slash commands for global scope.');
+        if (productionMode) {
+            Logger.info('-----------------------------');
+            await slashCommandRegistrar.guildsRegister();
+
+            Logger.info('-----------------------------');
             await slashCommandRegistrar.globalRegister();
-            Logger.info('Successfully reloaded application slash commands for global scope.');
         }
 
         process.exit();

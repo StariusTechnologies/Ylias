@@ -1,7 +1,7 @@
 import { Piece, PieceContext, PieceOptions } from '@sapphire/pieces';
 import type { Awaited } from '@sapphire/utilities';
 import { BucketScope, err, ok, Result, UserError } from '@sapphire/framework';
-import type { Interaction, Permissions } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import type { SlashCommand } from './SlashCommand';
 import { SlashCommandPreconditionError } from '../errors/SlashCommandPreconditionError';
 
@@ -17,7 +17,7 @@ export abstract class SlashCommandPrecondition extends Piece {
     }
 
     public abstract run(
-        interaction: Interaction,
+        interaction: CommandInteraction,
         command: SlashCommand,
         context: SlashCommandPrecondition.Context
     ): SlashCommandPrecondition.Result;
@@ -94,9 +94,6 @@ export interface SlashCommandPreconditions {
     GuildTextOnly: never;
     GuildThreadOnly: never;
     NSFW: never;
-    Permissions: {
-        permissions: Permissions;
-    };
 }
 
 export type SlashCommandPreconditionKeys = keyof SlashCommandPreconditions;

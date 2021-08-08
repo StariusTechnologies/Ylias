@@ -1,5 +1,5 @@
 import { container } from '@sapphire/pieces';
-import type { Interaction } from 'discord.js';
+import type { CommandInteraction } from 'discord.js';
 import type { SlashCommand } from '../structures/SlashCommand';
 import type {
     SlashCommandPreconditionContext,
@@ -42,7 +42,7 @@ export class SlashCommandPreconditionContainerSingle implements ISlashCommandPre
     }
 
     public run(
-        interaction: Interaction,
+        interaction: CommandInteraction,
         command: SlashCommand,
         context: SlashCommandPreconditionContext = {}
     ): SlashCommandPreconditionContainerReturn {

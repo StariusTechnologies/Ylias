@@ -8,7 +8,6 @@ import {
     SapphireClient
 } from '@sapphire/framework';
 import { config as configureEnvironment } from 'dotenv';
-import Logger from '@lilywonhalf/pretty-logger';
 import SlashCommandStore from './framework/lib/structures/SlashCommandStore';
 import { SlashCommandPreconditionStore } from './framework/lib/structures/SlashCommandPreconditionStore';
 

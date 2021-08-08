@@ -5,8 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node .",
+    "watch": "npx tsc -w",
     "register-commands-dev": "node dist/command-registration.js",
-    "register-commands-prod": "node dist/command-registration.js global",
+    "register-commands-prod": "node dist/command-registration.js prod",
     "rcd": "npm run register-commands-dev",
     "rcp": "npm run register-commands-prod",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -31,6 +32,7 @@
   "dependencies": {
     "@discordjs/rest": "^0.1.0-canary.0",
     "@lilywonhalf/pretty-logger": "^2.0",
+    "@sapphire/fetch": "^1.0.5",
     "@sapphire/framework": "next",
     "discord.js": "^13",
     "dotenv": "^10.0.0"
