@@ -29,7 +29,6 @@ export type SlashCommandPreconditionSingleResolvable = SimpleSlashCommandPrecond
 
 export class SlashCommandPreconditionContainerSingle implements ISlashCommandPreconditionContainer {
     public readonly context: Record<PropertyKey, unknown>;
-
     public readonly name: string;
 
     public constructor(data: SlashCommandPreconditionSingleResolvable) {

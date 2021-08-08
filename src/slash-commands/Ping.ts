@@ -5,7 +5,6 @@ import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 export default class PingCommand extends SlashCommand {
     constructor(context: PieceContext) {
         super(context, {
-            aliases: ['pong'],
             description: 'Tests the latency.',
         });
     }

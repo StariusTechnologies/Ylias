@@ -6,7 +6,7 @@ import { Events } from '../models/framework/lib/types/Events';
 export default class InteractionCreate extends Listener<typeof Constants.Events.INTERACTION_CREATE> {
     constructor(context: PieceContext) {
         super(context, {
-            event: 'interactionCreate',
+            event: Constants.Events.INTERACTION_CREATE,
         });
     }
 
@@ -21,9 +21,7 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
      */
     async _commandInteractionHandler(interaction: CommandInteraction): Promise<void> {
         const args = interaction.options;
-        const commandName = interaction.client.options.caseInsensitiveCommands
-            ? interaction.commandName.toLowerCase()
-            : interaction.commandName;
+        const commandName = interaction.commandName;
         const command = this.container.stores.get('slash-commands').get(commandName);
         const context = { commandName };
         const payload = { interaction, command, parameters: interaction.options, context: { commandName } };

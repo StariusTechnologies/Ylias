@@ -5,10 +5,6 @@ import type {
 } from '../../structures/SlashCommandPrecondition';
 import type { ISlashCommandPreconditionContainer, SlashCommandPreconditionContainerReturn } from '../ISlashCommandPreconditionContainer';
 
-/**
- * Defines the condition for {@link SlashCommandPreconditionContainerArray}s to run.
- * @since 1.0.0
- */
 export interface ISlashCommandPreconditionCondition {
     sequential(
         interaction: Interaction,

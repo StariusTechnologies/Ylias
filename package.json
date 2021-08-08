@@ -5,6 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node .",
+    "register-commands-dev": "node dist/command-registration.js",
+    "register-commands-prod": "node dist/command-registration.js global",
+    "rcd": "npm run register-commands-dev",
+    "rcp": "npm run register-commands-prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +29,7 @@
   },
   "homepage": "https://github.com/LilyWonhalf/YliasDiscordBot#readme",
   "dependencies": {
+    "@discordjs/rest": "^0.1.0-canary.0",
     "@lilywonhalf/pretty-logger": "^2.0",
     "@sapphire/framework": "next",
     "discord.js": "^13",

@@ -19,7 +19,6 @@ export class SlashCommandPreconditionError extends UserError {
 export namespace SlashCommandPreconditionError {
     export interface Options extends Omit<UserError.Options, 'identifier'> {
         precondition: SlashCommandPrecondition;
-
         identifier?: string;
     }
 }

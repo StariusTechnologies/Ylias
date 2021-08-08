@@ -64,9 +64,7 @@ function isSingle(entry: SlashCommandPreconditionEntryResolvable): entry is Slas
  */
 export class SlashCommandPreconditionContainerArray implements ISlashCommandPreconditionContainer {
     public readonly mode: SlashCommandPreconditionRunMode;
-
     public readonly entries: ISlashCommandPreconditionContainer[];
-
     public readonly runCondition: SlashCommandPreconditionRunCondition;
 
     public constructor(

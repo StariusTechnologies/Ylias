@@ -1,6 +1,12 @@
-import { AliasPiece, AliasPieceOptions, PieceContext } from '@sapphire/pieces';
+import { AliasPiece, PieceContext, PieceOptions } from '@sapphire/pieces';
 import { Awaited, isNullish } from '@sapphire/utilities';
-import { Interaction, PermissionResolvable, Permissions, CommandInteractionOptionResolver } from 'discord.js';
+import {
+    Interaction,
+    PermissionResolvable,
+    Permissions,
+    CommandInteractionOptionResolver,
+    ApplicationCommandOptionData,
+} from 'discord.js';
 import {
     CommandOptionsRunType,
     CommandPreConditions,
@@ -13,28 +19,15 @@ import {
 
 export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends AliasPiece {
     public description: string;
-
     public preconditions: SlashCommandPreconditionContainerArray;
-
     public detailedDescription: string;
+    public arguments: ApplicationCommandOptionData[];
 
     protected constructor(context: PieceContext, options: SlashCommandOptions = {}) {
         super(context, { ...options, name: (options.name ?? context.name).toLowerCase() });
         this.description = options.description ?? '';
         this.detailedDescription = options.detailedDescription ?? '';
-
-        if (options.generateDashLessAliases) {
-            const names = [this.name, ...this.aliases];
-            const dashLessAliases = [];
-
-            for (const name of names) {
-                if (name.includes('-')) {
-                    dashLessAliases.push(name.replace(/-/gu, ''));
-                }
-            }
-
-            this.aliases = [...this.aliases, ...dashLessAliases];
-        }
+        this.arguments = options.arguments ?? [];
 
         this.preconditions = new SlashCommandPreconditionContainerArray(options.preconditions);
         this.parseConstructorPreConditions(options);
@@ -191,25 +184,16 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
     }
 }
 
-export interface SlashCommandOptions extends AliasPieceOptions {
-    generateDashLessAliases?: boolean;
-
+export interface SlashCommandOptions extends PieceOptions {
+    arguments?: ApplicationCommandOptionData[];
     description?: string;
-
     detailedDescription?: string;
-
     preconditions?: readonly SlashCommandPreconditionEntryResolvable[];
-
     nsfw?: boolean;
-
     cooldownLimit?: number;
-
     cooldownDelay?: number;
-
     cooldownScope?: BucketScope;
-
     requiredClientPermissions?: PermissionResolvable;
-
     runIn?: CommandOptionsRunType | readonly CommandOptionsRunType[] | null;
 }
 
