@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node .",
-    "watch": "npx tsc -w",
+    "watch": "npx tsc --project tsconfig.json -w",
     "register-commands-dev": "node dist/command-registration.js",
     "register-commands-prod": "node dist/command-registration.js prod",
     "rcd": "npm run register-commands-dev",
@@ -34,6 +34,9 @@
     "@lilywonhalf/pretty-logger": "^2.0",
     "@sapphire/fetch": "^1.0.5",
     "@sapphire/framework": "next",
+    "@types/node": "^16.4.13",
+    "@types/node-fetch": "^2.5.12",
+    "discord-api-types": "^0.22.0",
     "discord.js": "^13",
     "dotenv": "^10.0.0"
   },
