@@ -22,6 +22,7 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
     public detailedDescription: string;
     public arguments: ApplicationCommandOptionData[];
     public guildCommand: boolean;
+    public defaultPermission: boolean;
     public permissions: ApplicationCommandPermissionData[];
 
     protected constructor(context: PieceContext, options: SlashCommandOptions = {}) {
@@ -30,6 +31,7 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
         this.detailedDescription = options.detailedDescription ?? '';
         this.arguments = options.arguments ?? [];
         this.guildCommand = options.permissions?.length > 0 ? true : options.guildCommand as boolean;
+        this.defaultPermission = options.defaultPermission ?? true;
         this.permissions = options.permissions ?? [];
 
         this.preconditions = new SlashCommandPreconditionContainerArray(options.preconditions);
@@ -196,6 +198,7 @@ export interface SlashCommandOptions extends PieceOptions {
     description?: string;
     detailedDescription?: string;
     guildCommand?: boolean;
+    defaultPermission?: boolean;
     permissions?: ApplicationCommandPermissionData[];
     preconditions?: readonly SlashCommandPreconditionEntryResolvable[];
     nsfw?: boolean;

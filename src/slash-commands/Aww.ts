@@ -17,7 +17,7 @@ export default class AwwCommand extends SlashCommand {
             preconditions: [{
                 name: 'Cooldown',
                 context: {
-                    scope: BucketScope.Channel,
+                    scope: BucketScope.User,
                     delay: 10000,
                 },
             }],

@@ -70,7 +70,7 @@ export class SlashCommandRegistrar {
 
         Logger.info('Started refreshing application slash commands for test guild.');
 
-        await Promise.all([
+        const resultCommands = await Promise.all([
             this.rest.put(
                 Routes.applicationGuildCommands(this.client.id, testGuild.id),
                 { body: this.globalSlashCommandData }
@@ -81,7 +81,7 @@ export class SlashCommandRegistrar {
             ),
         ]);
 
-        await testGuild.commands.permissions.set({
+        const resultPermissions = await testGuild.commands.permissions.set({
             fullPermissions: commandsWithPermissions.map((command: ApplicationCommand) => {
                 return {
                     id: command.id,
@@ -144,6 +144,7 @@ export class SlashCommandRegistrar {
                     type: ApplicationCommandOptionTypeMap[argument.type.toString()],
                 }
             }),
+            default_permission: slashCommand.defaultPermission,
         };
     }
 }
