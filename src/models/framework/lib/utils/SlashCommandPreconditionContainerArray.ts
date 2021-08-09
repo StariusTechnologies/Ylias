@@ -52,11 +52,11 @@ function isSingle(entry: SlashCommandPreconditionEntryResolvable): entry is Slas
  * This allows `['Connect', ['Moderator', ['DJ', 'Author']]]` to become a thrice-nested precondition container, where:
  * - Level 1: [Single(Connect), Array] runs AND, both containers must return a successful value.
  * - Level 2: [Single(Moderator), Array] runs OR, either container must return a successful value.
- * - Level 3: [Single(DJ), Single(SongAuthor)] runs AND, both containers must return a successful value.
+ * - Level 3: [Single(DJ), Single(Author)] runs AND, both containers must return a successful value.
  *
  * In other words, it is identical to doing:
  * ```typescript
- * Connect && (Moderator || (DJ && SongAuthor));
+ * Connect && (Moderator || (DJ && Author));
  * ```
  *
  * More advanced logic can be accomplished by adding more {@link ISlashCommandPreconditionCondition}s

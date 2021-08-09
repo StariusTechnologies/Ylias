@@ -21,7 +21,7 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
      */
     async _commandInteractionHandler(interaction: CommandInteraction): Promise<void> {
         const args = interaction.options;
-        const commandName = interaction.commandName;
+        const { commandName } = interaction;
         const command = this.container.stores.get('slash-commands').get(commandName);
 
         if (!command) {

@@ -2,7 +2,7 @@ import { CommandInteraction } from 'discord.js';
 import { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { fetch } from '@sapphire/fetch';
-import { BucketScope } from "@sapphire/framework";
+import { BucketScope } from '@sapphire/framework';
 
 export default class AwwCommand extends SlashCommand {
     constructor(context: PieceContext) {
