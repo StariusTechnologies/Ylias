@@ -2,16 +2,18 @@ import { CommandInteraction } from 'discord.js';
 import { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '../models/Emotion';
+import { BucketScope } from '@sapphire/framework';
 
 export default class CrashCommand extends SlashCommand {
     constructor(context: PieceContext) {
         super(context, {
             description: 'This command kills me. I mean... Literally.',
-            defaultPermission: false,
-            permissions: [{
-                id: process.env.MOM,
-                type: 'USER',
-                permission: true,
+            preconditions: [{
+                name: 'Cooldown',
+                context: {
+                    scope: BucketScope.User,
+                    delay: 10000,
+                },
             }],
         });
     }
