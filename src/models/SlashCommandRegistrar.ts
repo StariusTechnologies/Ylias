@@ -91,7 +91,7 @@ export class SlashCommandRegistrar {
                 Routes.applicationGuildCommands(this.client.id, testGuild.id),
                 { body: this.guildSlashCommandData }
             ),
-        ]).catch(Logger.exception) as APIGuildApplicationCommand[][];
+        ]) as APIGuildApplicationCommand[][];
 
         const commandsWithPermissions = resultCommands.flat().filter((command: APIGuildApplicationCommand) => {
             return this.slashCommandStore.get(command.name).permissions?.length > 0;
@@ -104,7 +104,7 @@ export class SlashCommandRegistrar {
             };
         });
 
-        await testGuild.commands.permissions.set({ fullPermissions }).catch(Logger.exception);
+        await testGuild.commands.permissions.set({ fullPermissions });
 
         Logger.info('Successfully reloaded application slash commands for test guild.');
     }
@@ -136,7 +136,7 @@ export class SlashCommandRegistrar {
         const commandsResult = await this.rest.put(
             Routes.applicationGuildCommands(this.client.id, guild.id),
             { body: this.guildSlashCommandData }
-        ).catch(Logger.exception) as APIGuildApplicationCommand[];
+        ) as APIGuildApplicationCommand[];
 
         const commandsWithPermissions = commandsResult.filter((command: APIGuildApplicationCommand) => {
             return this.slashCommandStore.get(command.name).permissions?.length > 0;

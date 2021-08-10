@@ -19,7 +19,6 @@ import {
 export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends AliasPiece {
     public description: string;
     public preconditions: SlashCommandPreconditionContainerArray;
-    public detailedDescription: string;
     public arguments: ApplicationCommandOptionData[];
     public guildCommand: boolean;
     public defaultPermission: boolean;
@@ -28,7 +27,6 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
     protected constructor(context: PieceContext, options: SlashCommandOptions = {}) {
         super(context, { ...options, name: (options.name ?? context.name).toLowerCase() });
         this.description = options.description ?? '';
-        this.detailedDescription = options.detailedDescription ?? '';
         this.arguments = options.arguments ?? [];
         this.guildCommand = options.permissions?.length > 0 ? true : options.guildCommand as boolean;
         this.defaultPermission = options.defaultPermission ?? true;
@@ -44,7 +42,10 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
         return {
             ...super.toJSON(),
             description: this.description,
-            detailedDescription: this.detailedDescription,
+            arguments: this.arguments,
+            defaultPermission: this.defaultPermission,
+            permissions: this.permissions,
+            guildCommand: this.guildCommand,
         };
     }
 
@@ -196,7 +197,6 @@ export const enum SlashCommandPreConditions {
 export interface SlashCommandOptions extends PieceOptions {
     arguments?: ApplicationCommandOptionData[];
     description?: string;
-    detailedDescription?: string;
     guildCommand?: boolean;
     defaultPermission?: boolean;
     permissions?: ApplicationCommandPermissionData[];

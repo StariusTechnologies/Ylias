@@ -9,7 +9,7 @@ import {
     SlashCommandPreconditionResult
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
-export interface SlashCommandCooldownContext extends SlashCommandPreconditionContext {
+interface SlashCommandCooldownContext extends SlashCommandPreconditionContext {
     scope?: BucketScope;
     delay: number;
     limit?: number;
