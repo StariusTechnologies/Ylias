@@ -11,10 +11,14 @@ export default class SlashCommandError extends Listener<typeof Events.SlashComma
     }
 
     public async run(error: UserError, payload: SlashCommandErrorPayload): Promise<void> {
-        await payload.interaction.reply({
-            embeds: [
-                Emotion.getEmotionEmbed(Emotions.SAD).setTitle('Command error').setDescription(error.message),
-            ],
+        const method = payload.interaction.replied ? 'followUp' : 'reply';
+        const embed = Emotion.getEmotionEmbed(Emotions.SAD)
+            .setTitle('Command error')
+            .setDescription(error.message)
+            .setColor(0xFF0000);
+
+        await payload.interaction[method]({
+            embeds: [embed],
             ephemeral: true,
         });
     }

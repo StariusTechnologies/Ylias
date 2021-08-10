@@ -1,11 +1,24 @@
 import Logger from '@lilywonhalf/pretty-logger';
+import { Guild } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import { SlashCommand } from './framework/lib/structures/SlashCommand';
-import { SapphireClient } from '@sapphire/framework';
+import { Snowflake } from 'discord-api-types/globals';
 import { APIApplicationCommandOption } from 'discord-api-types/payloads/v8/_interactions/slashCommands';
-import { ApplicationCommand, Guild } from 'discord.js';
+import { SapphireClient } from '@sapphire/framework';
+import { SlashCommand } from './framework/lib/structures/SlashCommand';
 import SlashCommandStore from './framework/lib/structures/SlashCommandStore';
+
+export interface APIGuildApplicationCommand {
+    id: Snowflake;
+    application_id: Snowflake;
+    name: string;
+    description: string;
+    version?: string;
+    default_permission?: boolean;
+    type?: number;
+    guild_id: Snowflake;
+    options?: APIApplicationCommandOption[];
+}
 
 interface APIApplicationCommand {
     name: string;
@@ -64,9 +77,8 @@ export class SlashCommandRegistrar {
 
     public async testGuildRegister(): Promise<void> {
         const testGuild = this.client.guilds.cache.get(process.env.TEST_GUILD_ID);
-        const commandsWithPermissions = testGuild.commands.cache.filter((command: ApplicationCommand) => {
-            return this.slashCommandStore.get(command.name).permissions?.length > 0;
-        });
+
+        await testGuild.commands.fetch();
 
         Logger.info('Started refreshing application slash commands for test guild.');
 
@@ -79,16 +91,20 @@ export class SlashCommandRegistrar {
                 Routes.applicationGuildCommands(this.client.id, testGuild.id),
                 { body: this.guildSlashCommandData }
             ),
-        ]);
+        ]).catch(Logger.exception) as APIGuildApplicationCommand[][];
 
-        const resultPermissions = await testGuild.commands.permissions.set({
-            fullPermissions: commandsWithPermissions.map((command: ApplicationCommand) => {
-                return {
-                    id: command.id,
-                    permissions: this.slashCommandStore.get(command.name).permissions,
-                };
-            }),
+        const commandsWithPermissions = resultCommands.flat().filter((command: APIGuildApplicationCommand) => {
+            return this.slashCommandStore.get(command.name).permissions?.length > 0;
         });
+
+        const fullPermissions = commandsWithPermissions.map((command: APIGuildApplicationCommand) => {
+            return {
+                id: command.id,
+                permissions: this.slashCommandStore.get(command.name).permissions,
+            };
+        });
+
+        await testGuild.commands.permissions.set({ fullPermissions }).catch(Logger.exception);
 
         Logger.info('Successfully reloaded application slash commands for test guild.');
     }
@@ -115,23 +131,25 @@ export class SlashCommandRegistrar {
     }
 
     private async guildRegister(guild: Guild): Promise<void> {
-        const commandsWithPermissions = guild.commands.cache.filter((command: ApplicationCommand) => {
+        await guild.commands.fetch();
+
+        const commandsResult = await this.rest.put(
+            Routes.applicationGuildCommands(this.client.id, guild.id),
+            { body: this.guildSlashCommandData }
+        ).catch(Logger.exception) as APIGuildApplicationCommand[];
+
+        const commandsWithPermissions = commandsResult.filter((command: APIGuildApplicationCommand) => {
             return this.slashCommandStore.get(command.name).permissions?.length > 0;
         });
 
-        await this.rest.put(
-            Routes.applicationGuildCommands(this.client.id, guild.id),
-            { body: this.guildSlashCommandData }
-        );
-
-        await guild.commands.permissions.set({
-            fullPermissions: commandsWithPermissions.map((command: ApplicationCommand) => {
-                return {
-                    id: command.id,
-                    permissions: this.slashCommandStore.get(command.name).permissions,
-                };
-            }),
+        const fullPermissions = commandsWithPermissions.map((command: APIGuildApplicationCommand) => {
+            return {
+                id: command.id,
+                permissions: this.slashCommandStore.get(command.name).permissions,
+            };
         });
+
+        await guild.commands.permissions.set({ fullPermissions });
     }
 
     private slashCommandToSlashCommandData(slashCommand: SlashCommand): APIApplicationCommand {

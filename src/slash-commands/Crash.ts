@@ -23,8 +23,6 @@ export default class CrashCommand extends SlashCommand {
             )],
         });
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        crash++;
+        throw new Error('I just crashed');
     }
 }

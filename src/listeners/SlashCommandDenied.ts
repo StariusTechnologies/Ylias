@@ -11,10 +11,14 @@ export default class SlashCommandDenied extends Listener<typeof Events.SlashComm
     }
 
     public async run(error: UserError, payload: SlashCommandDeniedPayload): Promise<void> {
-        await payload.interaction.reply({
-            embeds: [
-                Emotion.getEmotionEmbed(Emotions.NEUTRAL).setTitle('Command denied').setDescription(error.message),
-            ],
+        const method = payload.interaction.replied ? 'followUp' : 'reply';
+        const embed = Emotion.getEmotionEmbed(Emotions.NEUTRAL)
+            .setTitle('Command denied')
+            .setDescription(error.message)
+            .setColor(0xFF4400);
+
+        await payload.interaction[method]({
+            embeds: [embed],
             ephemeral: true,
         });
     }
