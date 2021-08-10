@@ -21,6 +21,8 @@ export interface APIGuildApplicationCommand {
 }
 
 interface APIApplicationCommand {
+    application_id: Snowflake;
+    guild_id?: Snowflake;
     name: string;
     description: string;
     options?: APIApplicationCommandOption[];
@@ -63,12 +65,12 @@ export class SlashCommandRegistrar {
         Logger.info('Initializing slash commands data...');
 
         this.slashCommandStore = client.stores.get('slash-commands');
-        const globalCommands = this.slashCommandStore.array().filter(command => !command.guildCommand);
-        const guildCommands = this.slashCommandStore.array().filter(command => command.guildCommand);
+        const globalCommands = this.slashCommandStore.filter(command => !command.guildCommand);
+        const guildCommands = this.slashCommandStore.filter(command => command.guildCommand);
 
         this.client = client;
-        this.globalSlashCommandData = globalCommands.map(this.slashCommandToSlashCommandData);
-        this.guildSlashCommandData = guildCommands.map(this.slashCommandToSlashCommandData);
+        this.globalSlashCommandData = globalCommands.map(this.slashCommandToSlashCommandData.bind(this));
+        this.guildSlashCommandData = guildCommands.map(this.slashCommandToSlashCommandData.bind(this));
 
         Logger.info(`Global slash commands: ${this.globalSlashCommandData.map(command => command.name)}`);
         Logger.info(`Guild slash commands: ${this.guildSlashCommandData.map(command => command.name)}`);
@@ -77,21 +79,20 @@ export class SlashCommandRegistrar {
 
     public async testGuildRegister(): Promise<void> {
         const testGuild = this.client.guilds.cache.get(process.env.TEST_GUILD_ID);
+        const slashCommandData = this.globalSlashCommandData.map(data => {
+            return { ...data, guild_id: testGuild.id };
+        }).concat(this.guildSlashCommandData.map(data => {
+            return { ...data, guild_id: testGuild.id };
+        }));
 
         await testGuild.commands.fetch();
 
         Logger.info('Started refreshing application slash commands for test guild.');
 
-        const resultCommands = await Promise.all([
-            this.rest.put(
-                Routes.applicationGuildCommands(this.client.id, testGuild.id),
-                { body: this.globalSlashCommandData }
-            ),
-            this.rest.put(
-                Routes.applicationGuildCommands(this.client.id, testGuild.id),
-                { body: this.guildSlashCommandData }
-            ),
-        ]) as APIGuildApplicationCommand[][];
+        const resultCommands = await this.rest.put(
+            Routes.applicationGuildCommands(this.client.id, testGuild.id),
+            { body: slashCommandData }
+        ) as APIGuildApplicationCommand[];
 
         const commandsWithPermissions = resultCommands.flat().filter((command: APIGuildApplicationCommand) => {
             return this.slashCommandStore.get(command.name).permissions?.length > 0;
@@ -154,6 +155,8 @@ export class SlashCommandRegistrar {
 
     private slashCommandToSlashCommandData(slashCommand: SlashCommand): APIApplicationCommand {
         return {
+            application_id: this.client.application.id,
+            guild_id: null,
             name: slashCommand.name,
             description: slashCommand.description,
             options: slashCommand.arguments.map(argument => {

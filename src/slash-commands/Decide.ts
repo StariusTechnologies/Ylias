@@ -12,7 +12,7 @@ export default class DecideCommand extends SlashCommand {
                     name: `choice${index + 1}`,
                     description: 'One of the options',
                     type: 'STRING',
-                    required: index < 3,
+                    required: index < 2,
                 }
             }),
         });
