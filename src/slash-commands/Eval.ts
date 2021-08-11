@@ -22,7 +22,7 @@ export default class EvalCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         let output;
         const embed = new MessageEmbed()
             .setTitle('✅ Code executed')

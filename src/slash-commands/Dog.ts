@@ -18,7 +18,7 @@ export default class DogCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         const response = await fetch('https://random.dog/woof', FetchResultTypes.Text) as any;
 
         if (response?.split('\n').length < 2) {
