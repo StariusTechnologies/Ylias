@@ -18,7 +18,7 @@ export default class CatCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         const response = await fetch('https://aws.random.cat/meow') as any;
 
         if (response?.file) {

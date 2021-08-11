@@ -24,7 +24,7 @@ export default class AwwCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         const isHot = interaction.options.getBoolean('hot') as boolean;
         const url = `https://www.reddit.com/r/aww/${isHot ? '' : 'new'}.json?count=100`;
         const response = await fetch(url) as any;

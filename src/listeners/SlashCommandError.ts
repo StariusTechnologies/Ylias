@@ -1,3 +1,4 @@
+import Logger from '@lilywonhalf/pretty-logger';
 import { Listener, UserError } from '@sapphire/framework';
 import { PieceContext } from '@sapphire/pieces';
 import { Events, SlashCommandErrorPayload } from '../models/framework/lib/types/Events';
@@ -16,6 +17,8 @@ export default class SlashCommandError extends Listener<typeof Events.SlashComma
             .setTitle('Command error')
             .setDescription(error.message)
             .setColor(0xFF0000);
+
+        Logger.exception(error);
 
         await payload.interaction[method]({
             embeds: [embed],
