@@ -39,22 +39,16 @@ export default class ImgurCommand extends SlashCommand {
         ) as any;
 
         if (!responses?.data) {
-            return interaction.reply({
-                content: `Welp... Seems like Imgur API just crashed. I'm sorry ${interaction.user.username} :( ...`,
-                ephemeral: true,
-            });
+            throw new Error(`Welp... Seems like Imgur API just crashed. I'm sorry ${interaction.user.username}...`);
         }
 
         const results = responses.data.filter((response: any) => {
             return (response?.type?.indexOf('image') > -1 || response.is_album) && !response.nsfw;
         });
-        const result = results[Math.floor(Math.random() * results.length - 1)];
+        const result = results[Math.floor(Math.random() * results.length)];
 
         if (!result) {
-            return interaction.reply({
-                content: `Welp... Seems like there is no result for your search. I'm sorry ${interaction.user.username} :( ...`,
-                ephemeral: true,
-            });
+            throw new Error(`Welp... Seems like there is no result for your search. I'm sorry ${interaction.user.username}...`);
         }
 
         const link = result.gifv ?? result.link;
