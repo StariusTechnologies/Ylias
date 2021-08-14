@@ -3,7 +3,7 @@ import { Bootstrap } from './models/Bootstrap';
 import { SlashCommandRegistrar } from './models/SlashCommandRegistrar';
 
 const productionMode = process.argv.some(arg => arg.toLowerCase().includes('prod'));
-const bootstrap = new Bootstrap();
+const bootstrap = new Bootstrap({ dotEnvPath: `${__dirname}/../${productionMode ? 'prod' : ''}.env` });
 const slashCommandRegistrar = new SlashCommandRegistrar();
 
 bootstrap.initializeClient();

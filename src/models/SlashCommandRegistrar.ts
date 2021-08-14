@@ -114,7 +114,7 @@ export class SlashCommandRegistrar {
         Logger.info('Started refreshing application slash commands for production guilds.');
 
         await Promise.all(this.client.guilds.cache.filter(guild => guild.id !== process.env.TEST_GUILD_ID).map(
-            this.guildRegister
+            this.guildRegister.bind(this)
         ));
 
         Logger.info('Successfully reloaded application slash commands for production guilds.');

@@ -22,18 +22,27 @@ declare module '@sapphire/pieces' {
     }
 }
 
+type BootstrapOptions = {
+    dotEnvPath?: string;
+};
+
 export class Bootstrap {
     private static instance: Bootstrap;
 
     private intents: number[];
     private _client: SapphireClient;
 
-    public constructor() {
+    public constructor({ dotEnvPath }: BootstrapOptions = {}) {
         if (Bootstrap.instance) {
             return Bootstrap.instance;
         }
 
-        configureEnvironment();
+        if (dotEnvPath) {
+            configureEnvironment({ path: dotEnvPath });
+        } else {
+            configureEnvironment();
+        }
+
         this.intents = [];
 
         Bootstrap.instance = this;

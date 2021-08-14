@@ -1,6 +1,8 @@
-.env
+*.env
+!.sample.env
 node_modules
 package-lock.json
 .idea
 .vscode
 dist
+scripts

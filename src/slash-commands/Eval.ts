@@ -40,11 +40,11 @@ export default class EvalCommand extends SlashCommand {
             embed.setTitle('❌ Code crashed');
         }
 
-        if (!output || output.trim().length < 1) {
+        if (!output || output.toString().trim().length < 1) {
             output = '<empty>';
         }
 
-        embed.addField('Result', output);
+        embed.addField('Result', output.toString());
 
         await interaction.reply({
             embeds: [embed],
