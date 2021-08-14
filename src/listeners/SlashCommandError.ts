@@ -3,6 +3,7 @@ import { Listener, UserError } from '@sapphire/framework';
 import { PieceContext } from '@sapphire/pieces';
 import { Events, SlashCommandErrorPayload } from '../models/framework/lib/types/Events';
 import { Emotion, Emotions } from '../models/Emotion';
+import { inflate } from "zlib";
 
 export default class SlashCommandError extends Listener<typeof Events.SlashCommandError> {
     constructor(context: PieceContext) {
@@ -19,6 +20,14 @@ export default class SlashCommandError extends Listener<typeof Events.SlashComma
             .setColor(0xFF0000);
 
         Logger.exception(error);
+        Logger.debug({
+            user: {
+                id: payload.interaction.user.id,
+                tag: payload.interaction.user.tag,
+            },
+            name: payload.interaction.commandName,
+            options: payload.interaction.options,
+        });
 
         await payload.interaction[method]({
             embeds: [embed],
