@@ -3,6 +3,7 @@ import { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
+import Logger from "@lilywonhalf/pretty-logger";
 
 export default class CatCommand extends SlashCommand {
     constructor(context: PieceContext) {
@@ -19,7 +20,9 @@ export default class CatCommand extends SlashCommand {
     }
 
     public async run(interaction: CommandInteraction): Promise<void> {
-        const response = await fetch('https://aws.random.cat/meow') as any;
+        const response = await fetch('https://aws.random.cat/meow').catch(error => {
+            Logger.notice(error);
+        }) as any;
 
         if (response?.file) {
             await interaction.reply(response.file);
