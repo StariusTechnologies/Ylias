@@ -15,7 +15,7 @@ export default class AvatarCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         const user: User = interaction.options.getUser('user') ?? interaction.user;
         const avatarURL = user.displayAvatarURL({ dynamic: true });
 

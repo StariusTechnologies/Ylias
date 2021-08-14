@@ -9,7 +9,7 @@ export default class PingCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         const response = await interaction.reply({ content: 'Ping...', fetchReply: true }) as Message;
         const latency = response.createdTimestamp - interaction.createdTimestamp;
 

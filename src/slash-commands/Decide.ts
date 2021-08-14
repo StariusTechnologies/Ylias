@@ -18,7 +18,7 @@ export default class DecideCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         const choices = interaction.options.data.filter(option => option.value).map(option => option.value);
         const choice = choices[Math.floor(Math.random() * choices.length)];
         const deliverySentences = [
