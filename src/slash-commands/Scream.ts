@@ -75,6 +75,13 @@ export default class PingCommand extends SlashCommand {
         let renderedScream;
         let multipliedLetter;
 
+        if (scream.length === 1) {
+            return {
+                renderedScream: `${scream.toUpperCase()}%%`,
+                multipliedLetter: scream.toLowerCase(),
+            }
+        }
+
         if (vowelRegexp.test(scream)) {
             let vowel;
             let vowelPosition;

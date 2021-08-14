@@ -135,9 +135,11 @@ export default class SlotsCommand extends SlashCommand {
 
         const won = firstEmoji == secondEmoji && secondEmoji == thirdEmoji;
         const result = won ? ':sparkles: **JACKPOT** :sparkles:' : ':x: **TRY AGAIN** :x:';
-        const embed = Emotion.getEmotionEmbed(Emotions.SURPRISE).setTitle('Slots machine').setDescription(
-            `${firstEmoji}${secondEmoji}${thirdEmoji}\n${result}`
-        );
+        const embed = Emotion.getEmotionEmbed(won ? Emotions.SURPRISE : Emotions.WINK)
+            .setTitle('Slots machine')
+            .setDescription(
+                `${firstEmoji}${secondEmoji}${thirdEmoji}\n${result}`
+            );
         const reply: any = { embeds: [embed] };
 
         if (won) {
