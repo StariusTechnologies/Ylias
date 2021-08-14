@@ -14,7 +14,16 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
     }
 
     public run(message: Message): void {
+        this.handlePrefixedCommand(message);
         this.handleMomMention(message);
+    }
+
+    private handlePrefixedCommand(message: Message): void {
+        const commandName = message.content.split(' ')[0].slice(1);
+
+        if (this.container.stores.get('slash-commands').has(commandName)) {
+            message.reply(`I work with slash commands now, try typing \`/${commandName.toLowerCase()}\`!`);
+        }
     }
 
     private handleMomMention(message: Message): void {
