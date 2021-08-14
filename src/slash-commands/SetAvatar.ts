@@ -22,7 +22,7 @@ export default class SetAvatarCommand extends SlashCommand {
                     formats: [{
                         name: 'url',
                         errorMessage: 'This URL is invalid',
-                        format: SlashCommandArgumentFormats.URL,
+                        validate: SlashCommandArgumentFormats.URL,
                     }],
                 },
             }],

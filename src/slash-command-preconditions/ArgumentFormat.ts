@@ -7,12 +7,12 @@ import {
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
 export const SlashCommandArgumentFormats = {
-    URL: /^https?:\/\/.+/gu,
+    URL: /^https?:\/\/.+/gu.test,
 }
 
 interface SlashCommandArgumentFormatData {
     name: string;
-    format: RegExp;
+    validate: (value: string) => boolean;
     errorMessage?: string;
 }
 
@@ -47,7 +47,7 @@ export class CorePrecondition extends SlashCommandPrecondition {
                 continue;
             }
 
-            if (!formatData.format.test(interaction.options.get(formatData.name).value as string)) {
+            if (!formatData.validate(interaction.options.get(formatData.name).value as string)) {
                 return this.error({
                     identifier: 'slashCommandPreconditionArgumentFormat',
                     message: formatData.errorMessage ?? `The value you entered for the option "${formatData.name}" is invalid.`,
