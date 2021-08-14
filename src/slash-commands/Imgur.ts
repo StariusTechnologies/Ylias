@@ -3,6 +3,7 @@ import { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
+import { Emotion, Emotions } from "../models/Emotion";
 
 export default class ImgurCommand extends SlashCommand {
     constructor(context: PieceContext) {
@@ -39,7 +40,11 @@ export default class ImgurCommand extends SlashCommand {
         ) as any;
 
         if (!responses?.data) {
-            throw new Error(`Welp... Seems like Imgur API just crashed. I'm sorry ${interaction.user.username}...`);
+            const embed = Emotion.getEmotionEmbed(Emotions.SAD)
+                .setTitle('No more images')
+                .setDescription(`Welp... Seems like Imgur API just crashed...`);
+
+            await interaction.reply({ embeds: [embed], ephemeral: true });
         }
 
         const results = responses.data.filter((response: any) => {
@@ -48,7 +53,11 @@ export default class ImgurCommand extends SlashCommand {
         const result = results[Math.floor(Math.random() * results.length)];
 
         if (!result) {
-            throw new Error(`Welp... Seems like there is no result for your search. I'm sorry ${interaction.user.username}...`);
+            const embed = Emotion.getEmotionEmbed(Emotions.SAD)
+                .setTitle('No results')
+                .setDescription(`Welp... Seems like there is no result for your search...`);
+
+            await interaction.reply({ embeds: [embed], ephemeral: true });
         }
 
         const link = result.gifv ?? result.link;
