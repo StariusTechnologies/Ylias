@@ -1,4 +1,4 @@
-import { Constants, Message, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
+import { Constants, Message, MessageAttachment, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import { PieceContext } from '@sapphire/pieces';
 import Emojis from '../models/Emojis';
@@ -20,9 +20,28 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
 
     private handlePrefixedCommand(message: Message): void {
         const commandName = message.content.split(' ')[0].slice(1);
+        const embed = Emotion.getEmotionEmbed(Emotions.WINK).setTitle('Slash commands');
+        const commandsToIgnore = ['ping'];
+        const commandExists = this.container.stores.get('slash-commands').has(commandName);
 
-        if (this.container.stores.get('slash-commands').has(commandName)) {
-            message.reply(`I work with slash commands now, try typing \`/${commandName.toLowerCase()}\`!`);
+        if (message.content.startsWith('/')) {
+            message.reply({
+                embeds: [embed.setDescription(`You actually have to click on the slash command when it pops up (you can also use the tab key on desktop) or else it won't work`)],
+                files: [
+                    new MessageAttachment(
+                        'https://i.discord.fr/UZR.png',
+                        'mobile-click.png'
+                    ),
+                    new MessageAttachment(
+                        'https://i.discord.fr/DGJ.png',
+                        'desktop-click.png'
+                    ),
+                ],
+            });
+        } else if (!commandsToIgnore.includes(commandName) && commandExists) {
+            message.reply({
+                embeds: [embed.setDescription(`I work with slash commands now, try typing \`/${commandName.toLowerCase()}\`!`)],
+            });
         }
     }
 
@@ -33,7 +52,7 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
 
         const mom = message.client.users.cache.get(process.env.MOM);
         const momMember = message.guild.members.cache.get(mom.id);
-        const cancelWords = ['lildami', 'wolfyse'];
+        const cancelWords = ['lildami', 'wolfy', 'lille'];
         const searchWords = [
             mom.id,
             mom.username,
