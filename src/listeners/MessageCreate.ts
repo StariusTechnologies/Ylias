@@ -24,24 +24,26 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
         const commandsToIgnore = ['ping'];
         const commandExists = this.container.stores.get('slash-commands').has(commandName);
 
-        if (message.content.startsWith('/')) {
-            message.reply({
-                embeds: [embed.setDescription(`You actually have to click on the slash command when it pops up (you can also use the tab key on desktop) or else it won't work`)],
-                files: [
-                    new MessageAttachment(
-                        'https://i.discord.fr/UZR.png',
-                        'mobile-click.png'
-                    ),
-                    new MessageAttachment(
-                        'https://i.discord.fr/DGJ.png',
-                        'desktop-click.png'
-                    ),
-                ],
-            });
-        } else if (!commandsToIgnore.includes(commandName) && commandExists) {
-            message.reply({
-                embeds: [embed.setDescription(`I work with slash commands now, try typing \`/${commandName.toLowerCase()}\`!`)],
-            });
+        if (commandExists) {
+            if (message.content.startsWith('/')) {
+                message.reply({
+                    embeds: [embed.setDescription(`You actually have to click on the slash command when it pops up (you can also use the tab key on desktop) or else it won't work`)],
+                    files: [
+                        new MessageAttachment(
+                            'https://i.discord.fr/UZR.png',
+                            'mobile-click.png'
+                        ),
+                        new MessageAttachment(
+                            'https://i.discord.fr/DGJ.png',
+                            'desktop-click.png'
+                        ),
+                    ],
+                });
+            } else if (!commandsToIgnore.includes(commandName)) {
+                message.reply({
+                    embeds: [embed.setDescription(`I work with slash commands now, try typing \`/${commandName.toLowerCase()}\`!`)],
+                });
+            }
         }
     }
 
