@@ -1,5 +1,5 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import Logger from '@lilywonhalf/pretty-logger';
 
@@ -16,7 +16,7 @@ export default class EvalCommand extends SlashCommand {
             }],
             permissions: [{
                 type: 'USER',
-                id: process.env.MOM,
+                id: process.env.MOM as string,
                 permission: true,
             }],
         });
@@ -33,7 +33,7 @@ export default class EvalCommand extends SlashCommand {
             });
 
         try {
-            output = eval(interaction.options.getString('code'));
+            output = eval(interaction.options.getString('code', true));
         } catch (error) {
             Logger.exception(error);
             output = error.message;

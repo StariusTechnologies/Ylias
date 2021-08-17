@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node .",
-    "watch": "tsc -p . -w",
+    "compile": "tsc -b src",
+    "watch": "npm run compile -- -w",
     "register-commands-dev": "node dist/command-registration.js",
     "register-commands-prod": "node dist/command-registration.js prod",
     "rcd": "npm run register-commands-dev",
@@ -15,7 +16,10 @@
     "ccf": "npm run check-config-files",
     "update-config-files": "scripts/update-config-files.sh",
     "ucf": "npm run update-config-files",
-    "test": "npm run check-config-files"
+    "test": "jest"
+  },
+  "imports": {
+    "#mocks/*": "./tests/mocks/*.js"
   },
   "repository": {
     "type": "git",
@@ -39,20 +43,30 @@
     "@lilywonhalf/pretty-logger": "^2.0",
     "@sapphire/fetch": "^1.0.5",
     "@sapphire/framework": "next",
-    "@types/node": "^16.4.13",
     "@types/node-fetch": "^2.5.12",
     "discord-api-types": "^0.22.0",
     "discord.js": "^13",
     "dotenv": "^10.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-decorators": "^7.14.5",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-typescript": "^7.15.0",
     "@sapphire/eslint-config": "^3.2.3",
     "@sapphire/prettier-config": "^1.1.6",
     "@sapphire/ts-config": "^3.0.0",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.6.1",
+    "babel-plugin-const-enum": "^1.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-jsdoc": "^36.0.6",
     "jest": "^27.0.6",
+    "jest-circus": "^27.0.6",
+    "jest-mock-random": "^1.1.1",
+    "ts-node": "^10.2.0",
     "ts-purify": "^3.0.1",
     "typescript": "^4.3.5",
     "typescript-eslint": "^0.0.1-alpha.0"

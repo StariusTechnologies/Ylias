@@ -1,5 +1,5 @@
-import { CommandInteraction } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { CommandInteraction } from 'discord.js';
+import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '../models/Emotion';
 
@@ -40,7 +40,7 @@ export default class PingCommand extends SlashCommand {
     }
 
     public async run(interaction: CommandInteraction): Promise<void> {
-        const scream = interaction.options.getString('scream');
+        const scream = interaction.options.getString('scream', true);
         let renderedScream;
         let multipliedLetter;
         let emoji = '';
@@ -61,7 +61,7 @@ export default class PingCommand extends SlashCommand {
         }
 
         multipliedLetter += Array(Math.floor(Math.random() * 42)).fill(multipliedLetter).join('');
-        renderedScream = renderedScream.replace(/%%/gu, multipliedLetter);
+        renderedScream = renderedScream.replace(/%%/gu, multipliedLetter as string);
 
         const embed = Emotion.getEmotionEmbed(emotion)
             .setTitle('Scream')
@@ -84,7 +84,7 @@ export default class PingCommand extends SlashCommand {
 
         if (vowelRegexp.test(scream)) {
             let vowel;
-            let vowelPosition;
+            let vowelPosition = 0;
             let regexpResult;
             const doubleVowelRegexp = /([aeiouy])\1/igu;
 
@@ -126,7 +126,7 @@ export default class PingCommand extends SlashCommand {
         }
 
         renderedScream = renderedScream.toUpperCase();
-        multipliedLetter = multipliedLetter.toUpperCase();
+        multipliedLetter = multipliedLetter!.toUpperCase();
 
         return { renderedScream, multipliedLetter };
     }

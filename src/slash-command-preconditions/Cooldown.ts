@@ -2,7 +2,7 @@ import { RateLimitManager } from '@sapphire/ratelimits';
 import type { CommandInteraction } from 'discord.js';
 import { BucketScope } from '@sapphire/framework';
 import { Identifiers } from '../models/framework/lib/errors/Identifiers';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
+import type { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import {
     SlashCommandPrecondition,
     SlashCommandPreconditionContext,

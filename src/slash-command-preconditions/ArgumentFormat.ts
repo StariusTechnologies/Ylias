@@ -1,5 +1,5 @@
 import type { CommandInteraction, ApplicationCommandOptionType } from 'discord.js';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
+import type { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import {
     SlashCommandPrecondition,
     SlashCommandPreconditionContext,
@@ -29,7 +29,7 @@ declare module '../models/framework/lib/structures/SlashCommandPrecondition' {
 export class CorePrecondition extends SlashCommandPrecondition {
     public run(
         interaction: CommandInteraction,
-        command: SlashCommand,
+        _: SlashCommand,
         context: SlashCommandArgumentFormatContext
     ): SlashCommandPreconditionResult {
         // If the command it is testing for is not this one, return ok:
@@ -41,13 +41,13 @@ export class CorePrecondition extends SlashCommandPrecondition {
 
         for (const formatData of context.formats) {
             const hasArgument = interaction.options.get(formatData.name);
-            const isCorrectType = hasArgument && acceptedTypes.includes(interaction.options.get(formatData.name).type);
+            const isCorrectType = hasArgument && acceptedTypes.includes(interaction.options.get(formatData.name)!.type);
 
             if (!isCorrectType) {
                 continue;
             }
 
-            if (!formatData.validate(interaction.options.get(formatData.name).value as string)) {
+            if (!formatData.validate(interaction.options.get(formatData.name)!.value as string)) {
                 return this.error({
                     identifier: 'slashCommandPreconditionArgumentFormat',
                     message: formatData.errorMessage ?? `The value you entered for the option "${formatData.name}" is invalid.`,

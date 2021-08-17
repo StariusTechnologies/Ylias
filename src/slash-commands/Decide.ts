@@ -1,5 +1,5 @@
-import { CommandInteraction } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { CommandInteraction } from 'discord.js';
+import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '../models/Emotion';
 
@@ -7,7 +7,7 @@ export default class DecideCommand extends SlashCommand {
     constructor(context: PieceContext) {
         super(context, {
             description: 'Multiple options, you need to make a choice, and you just can\'t make your mind? Let me help :D !',
-            arguments: Array(10).fill({}).map((element: any, index) => {
+            arguments: Array(10).fill({}).map((_: any, index) => {
                 return {
                     name: `choice${index + 1}`,
                     description: 'One of the options',

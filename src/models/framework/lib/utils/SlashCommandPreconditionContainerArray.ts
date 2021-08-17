@@ -138,7 +138,7 @@ export class SlashCommandPreconditionContainerArray implements ISlashCommandPrec
     }
 
     protected get condition(): ISlashCommandPreconditionCondition {
-        return SlashCommandPreconditionContainerArray.conditions.get(this.runCondition);
+        return SlashCommandPreconditionContainerArray.conditions.get(this.runCondition)!;
     }
 
     /**

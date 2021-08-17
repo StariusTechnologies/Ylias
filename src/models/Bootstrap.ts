@@ -29,8 +29,8 @@ type BootstrapOptions = {
 export class Bootstrap {
     private static instance: Bootstrap;
 
-    private intents: number[];
-    private _client: SapphireClient;
+    public readonly client!: SapphireClient;
+    private intents: number[] = [];
 
     public constructor({ dotEnvPath }: BootstrapOptions = {}) {
         if (Bootstrap.instance) {
@@ -43,7 +43,11 @@ export class Bootstrap {
             configureEnvironment();
         }
 
-        this.intents = [];
+        this.intents;
+        this.client = new SapphireClient({
+            intents: this.intents,
+            defaultPrefix: '.',
+        });
 
         Bootstrap.instance = this;
     }
@@ -67,24 +71,15 @@ export class Bootstrap {
     }
 
     public initializeClient(): void {
-        this._client = new SapphireClient({
-            intents: this.intents,
-            defaultPrefix: '.',
-        });
-
-        this._client.stores.registerPath(join(__dirname, 'framework', 'errorListeners'));
-        this._client.stores.register(new SlashCommandStore());
-        this._client.stores.register(new SlashCommandPreconditionStore());
+        this.client.stores.registerPath(join(__dirname, 'framework', 'errorListeners'));
+        this.client.stores.register(new SlashCommandStore());
+        this.client.stores.register(new SlashCommandPreconditionStore());
     }
 
     public async login(): Promise<Client> {
         return new Promise((resolve, reject) => {
-            this._client.once('ready', resolve);
-            this._client.login(process.env.TOKEN).catch(reject);
+            this.client.once('ready', resolve);
+            this.client.login(process.env.TOKEN).catch(reject);
         });
-    }
-
-    public get client(): SapphireClient {
-        return this._client;
     }
 }

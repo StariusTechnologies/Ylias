@@ -1,10 +1,10 @@
-import { CommandInteraction } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { CommandInteraction } from 'discord.js';
+import type { PieceContext } from '@sapphire/pieces';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '../models/Emotion';
-import Logger from "@lilywonhalf/pretty-logger";
+import Logger from '@lilywonhalf/pretty-logger';
 
 export default class YouTubeCommand extends SlashCommand {
     private static readonly YOUTUBE_VIDEO_KIND = 'youtube#video';
@@ -31,7 +31,7 @@ export default class YouTubeCommand extends SlashCommand {
     public async run(interaction: CommandInteraction): Promise<void> {
         const videoURL = 'https://www.youtube.com/watch?v=';
         const apiBaseURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50`;
-        const query = encodeURIComponent(interaction.options.getString('query'));
+        const query = encodeURIComponent(interaction.options.getString('query', true));
         const apiURL = `${apiBaseURL}&key=${process.env.GOOGLE_API_KEY}&q=${query}`;
         const response: any = await fetch(apiURL);
         const errorEmbed = Emotion.getEmotionEmbed(Emotions.SAD).setTitle('YouTube');

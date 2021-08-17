@@ -2,7 +2,7 @@ import type { Awaited } from '@sapphire/utilities';
 import type { UserError, Result } from '@sapphire/framework';
 import type { CommandInteraction } from 'discord.js';
 import type { SlashCommand } from '../structures/SlashCommand';
-import { SlashCommandPreconditionContext } from '../structures/SlashCommandPrecondition';
+import type { SlashCommandPreconditionContext } from '../structures/SlashCommandPrecondition';
 
 export type SlashCommandPreconditionContainerResult = Result<unknown, UserError>;
 

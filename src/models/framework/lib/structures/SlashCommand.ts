@@ -1,6 +1,6 @@
 import { AliasPiece, PieceContext, PieceOptions } from '@sapphire/pieces';
 import { Awaited, isNullish } from '@sapphire/utilities';
-import {
+import type {
     CommandInteraction,
     PermissionResolvable,
     CommandInteractionOptionResolver,
@@ -28,7 +28,7 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
         super(context, { ...options, name: (options.name ?? context.name).toLowerCase() });
         this.description = options.description ?? '';
         this.arguments = options.arguments ?? [];
-        this.guildCommand = options.permissions?.length > 0 ? true : options.guildCommand as boolean;
+        this.guildCommand = options.permissions?.length as number > 0 ? true : options.guildCommand as boolean;
         this.defaultPermission = options.defaultPermission ?? true;
         this.permissions = options.permissions ?? [];
 

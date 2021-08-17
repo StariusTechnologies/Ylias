@@ -1,5 +1,5 @@
-import { CommandInteraction } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { CommandInteraction } from 'discord.js';
+import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { SlashCommandArgumentFormats } from '../slash-command-preconditions/ArgumentFormat';
 import { Emotion, Emotions } from '../models/Emotion';
@@ -28,14 +28,14 @@ export default class SetAvatarCommand extends SlashCommand {
             }],
             permissions: [{
                 type: 'USER',
-                id: process.env.MOM,
+                id: process.env.MOM as string,
                 permission: true,
             }],
         });
     }
 
     async run(interaction: CommandInteraction): Promise<void> {
-        interaction.client.user.setAvatar(interaction.options.getString('url')).then(() => {
+        interaction.client.user!.setAvatar(interaction.options.getString('url', true)).then(() => {
             const embed = Emotion.getEmotionEmbed(Emotions.NEUTRAL)
                 .setTitle('I look great!')
                 .setDescription('My profile picture has been successfully changed!');

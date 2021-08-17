@@ -1,5 +1,5 @@
-import { CommandInteraction } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { CommandInteraction } from 'discord.js';
+import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '../models/Emotion';
 import { BucketScope } from '@sapphire/framework';

@@ -1,6 +1,6 @@
 import { Interaction, CommandInteraction, Constants } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import { PieceContext } from '@sapphire/pieces';
+import type { PieceContext } from '@sapphire/pieces';
 import { Events } from '../models/framework/lib/types/Events';
 
 export default class InteractionCreate extends Listener<typeof Constants.Events.INTERACTION_CREATE> {

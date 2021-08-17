@@ -1,5 +1,5 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
@@ -64,7 +64,7 @@ export default class WikiCommand extends SlashCommand {
 
     async run(interaction: CommandInteraction): Promise<void> {
         const languagePrefix = interaction.options.getString('language');
-        const search = interaction.options.getString('search');
+        const search = interaction.options.getString('search', true);
         const host = 'https://' + languagePrefix + '.wikipedia.org';
         const path = '/w/api.php?action=query&prop=extracts&exintro&explaintext&format=json&redirects=1&titles=';
         const url = host + path + encodeURIComponent(search);

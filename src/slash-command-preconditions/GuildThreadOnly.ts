@@ -11,7 +11,7 @@ export class CorePrecondition extends SlashCommandPrecondition {
             ? this.ok()
             : this.error({
                 identifier: Identifiers.PreconditionThreadOnly,
-                message: 'You can only run this command in server thread channels.'
+                message: 'You can only run this command in server thread channels.',
             });
     }
 }

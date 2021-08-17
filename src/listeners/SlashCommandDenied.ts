@@ -1,5 +1,5 @@
 import { Listener, UserError } from '@sapphire/framework';
-import { PieceContext } from '@sapphire/pieces';
+import type { PieceContext } from '@sapphire/pieces';
 import { Events, SlashCommandDeniedPayload } from '../models/framework/lib/types/Events';
 import { Emotion, Emotions } from '../models/Emotion';
 

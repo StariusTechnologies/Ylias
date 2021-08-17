@@ -1,6 +1,6 @@
 import { Constants, Guild, MessageOptions } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import { PieceContext } from '@sapphire/pieces';
+import type { PieceContext } from '@sapphire/pieces';
 import { Emotion, Emotions } from '../models/Emotion';
 import Logger from '@lilywonhalf/pretty-logger';
 
@@ -12,7 +12,7 @@ export default class MessageCreate extends Listener<typeof Constants.Events.GUIL
     }
 
     public async run(guild: Guild): Promise<void> {
-        const mom = guild.client.users.cache.get(process.env.MOM);
+        const mom = guild.client.users.cache.get(process.env.MOM as string);
         const owner = await guild.fetchOwner().catch(Logger.notice);
         const invites = await guild.invites.fetch().catch(Logger.notice);
         const inviteLinks = [];
@@ -32,6 +32,6 @@ export default class MessageCreate extends Listener<typeof Constants.Events.GUIL
             data.content = inviteLinks.slice(0, 10).join('\n');
         }
 
-        await mom.send(data);
+        await mom!.send(data);
     }
 }

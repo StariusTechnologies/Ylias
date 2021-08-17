@@ -1,5 +1,5 @@
 import { Collection, CommandInteraction, User } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '../models/Emotion';
 
@@ -111,12 +111,12 @@ export default class SlotsCommand extends SlashCommand {
             SlotsCommand.firstAttemptTime.set(user, new Date);
         }
 
-        if (this.isDateBeforeToday(SlotsCommand.firstAttemptTime.get(user))) {
+        if (this.isDateBeforeToday(SlotsCommand.firstAttemptTime.get(user)!)) {
             SlotsCommand.attempts.set(user, 0);
             SlotsCommand.firstAttemptTime.set(user, new Date);
         }
 
-        if (SlotsCommand.attempts.get(user) >= SlotsCommand.MAX_ATTEMPTS) {
+        if (SlotsCommand.attempts.get(user)! >= SlotsCommand.MAX_ATTEMPTS) {
             await interaction.reply({
                 embeds: [Emotion.getEmotionEmbed(Emotions.WINK).setTitle('Come back tomorrow!').setDescription(
                     `You tried too hard today, ${user.username}, come back tomorrow :D !`
@@ -127,7 +127,7 @@ export default class SlotsCommand extends SlashCommand {
             return;
         }
 
-        SlotsCommand.attempts.set(user, SlotsCommand.attempts.get(user) + 1);
+        SlotsCommand.attempts.set(user, SlotsCommand.attempts.get(user)! + 1);
 
         const firstEmoji: string = SlotsCommand.emojis[Math.floor(Math.random() * SlotsCommand.emojis.length)];
         const secondEmoji: string = SlotsCommand.emojis[Math.floor(Math.random() * SlotsCommand.emojis.length)];
@@ -143,7 +143,7 @@ export default class SlotsCommand extends SlashCommand {
         const reply: any = { embeds: [embed] };
 
         if (won) {
-            reply.content = interaction.client.users.cache.get(process.env.MOM).toString();
+            reply.content = interaction.client.users.cache.get(process.env.MOM as string)!.toString();
         }
 
         await interaction.reply(reply);

@@ -7,9 +7,8 @@ import {
 
 export class CorePrecondition extends SlashCommandPrecondition {
     public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
-        // `nsfw` is undefined in DMChannel, doing `=== true`
-        // will result on it returning`false`.
-        return Reflect.get(interaction.channel, 'nsfw') === true
+        // `nsfw` is undefined in DMChannel, writing `=== true` will result in it returning`false`.
+        return interaction.channel && Reflect.get(interaction.channel, 'nsfw') === true
             ? this.ok()
             : this.error({
                 identifier: Identifiers.PreconditionNSFW,

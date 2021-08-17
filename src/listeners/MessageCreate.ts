@@ -1,6 +1,6 @@
 import { Constants, Message, MessageAttachment, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import { PieceContext } from '@sapphire/pieces';
+import type { PieceContext } from '@sapphire/pieces';
 import Emojis from '../models/Emojis';
 import { Emotion, Emotions } from '../models/Emotion';
 
@@ -46,11 +46,13 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
     }
 
     private handleMomMention(message: Message): void {
-        if (!message.guild || message.author?.id === process.env.MOM || message.mentions.users.has(process.env.MOM)) {
+        const pingsMom = message.mentions.users.has(process.env.MOM as string);
+
+        if (!message.guild || message.author?.id === process.env.MOM || pingsMom) {
             return;
         }
 
-        const mom = message.client.users.cache.get(process.env.MOM);
+        const mom = message.client.users.cache.get(process.env.MOM as string)!;
         const momMember = message.guild.members.cache.get(mom.id);
         const cancelWords = ['lildami', 'wolfy', 'lille'];
         const searchWords = [
@@ -68,7 +70,7 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
             `${Emojis.l} ${Emojis.i} ${Emojis.l} ${Emojis.y}`,
         ];
 
-        if (momMember) {
+        if (momMember && momMember.nickname) {
             searchWords.push(momMember.nickname);
         }
 
@@ -88,7 +90,7 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
             const channel = message.channel as GuildTextChannel;
             const embed = Emotion.getEmotionEmbed(Emotions.WINK)
                 .setURL(message.url)
-                .setAuthor(message.member.displayName, message.author.displayAvatarURL({ dynamic: true }), message.url)
+                .setAuthor(message.member!.displayName, message.author.displayAvatarURL({ dynamic: true }), message.url)
                 .setDescription(message.content)
                 .setFooter(`#${channel.name} in ${message.guild.name}`);
 

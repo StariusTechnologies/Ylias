@@ -1,9 +1,8 @@
 import Logger from '@lilywonhalf/pretty-logger';
 import { Listener, UserError } from '@sapphire/framework';
-import { PieceContext } from '@sapphire/pieces';
+import type { PieceContext } from '@sapphire/pieces';
 import { Events, SlashCommandErrorPayload } from '../models/framework/lib/types/Events';
 import { Emotion, Emotions } from '../models/Emotion';
-import { inflate } from "zlib";
 
 export default class SlashCommandError extends Listener<typeof Events.SlashCommandError> {
     constructor(context: PieceContext) {

@@ -1,9 +1,9 @@
-import { CommandInteraction } from 'discord.js';
-import { PieceContext } from '@sapphire/pieces';
+import type { CommandInteraction } from 'discord.js';
+import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
-import { Emotion, Emotions } from "../models/Emotion";
+import { Emotion, Emotions } from '../models/Emotion';
 
 export default class ImgurCommand extends SlashCommand {
     constructor(context: PieceContext) {
@@ -26,8 +26,7 @@ export default class ImgurCommand extends SlashCommand {
     }
 
     async run(interaction: CommandInteraction): Promise<void> {
-        const args = interaction.options.getString('search');
-        const search = args?.length > 0 ? args : '';
+        const search = interaction.options.getString('search', true);
         let path = search ? `/3/gallery/search/` : '/3/gallery/random/random/';
 
         path += '?q_size_px=med&q=' + encodeURIComponent(search);

@@ -1,0 +1,16 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "noEmit": true,
+        "incremental": false,
+        "baseUrl": ".",
+        "paths": {
+            "#mocks/*": ["./mocks/*"],
+            "#root/*": ["../src/*"],
+            "#root/models/*": ["../src/models/*"]
+        }
+    },
+    "include": [".", "../src/**/*"],
+    "exclude": ["../dist/**/*"],
+    "references": [{ "path": "../src" }]
+}

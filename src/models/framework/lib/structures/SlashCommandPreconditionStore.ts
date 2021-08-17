@@ -1,7 +1,7 @@
 import { Store } from '@sapphire/pieces';
 import { ok } from '@sapphire/framework';
 import type { CommandInteraction } from 'discord.js';
-import { SlashCommand } from './SlashCommand';
+import type { SlashCommand } from './SlashCommand';
 import { SlashCommandPrecondition, SlashCommandPreconditionContext, AsyncSlashCommandPreconditionResult } from './SlashCommandPrecondition';
 
 export class SlashCommandPreconditionStore extends Store<SlashCommandPrecondition> {
@@ -30,7 +30,7 @@ export class SlashCommandPreconditionStore extends Store<SlashCommandPreconditio
     public set(key: string, value: SlashCommandPrecondition): this {
         if (value.position !== null) {
             const index = this.globalPreconditions.findIndex(
-                (precondition) => precondition.position >= value.position
+                (precondition) => precondition.position! >= value.position!
             );
 
             // If a middleware with lower priority wasn't found, push to the end of the array
