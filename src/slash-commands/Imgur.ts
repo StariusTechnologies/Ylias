@@ -26,8 +26,8 @@ export default class ImgurCommand extends SlashCommand {
     }
 
     async run(interaction: CommandInteraction): Promise<void> {
-        const search = interaction.options.getString('search', true);
-        let path = search ? `/3/gallery/search/` : '/3/gallery/random/random/';
+        const search = interaction.options.getString('search') ?? '';
+        let path = search.length > 0 ? `/3/gallery/search/` : '/3/gallery/random/random/';
 
         path += '?q_size_px=med&q=' + encodeURIComponent(search);
 

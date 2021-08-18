@@ -1,7 +1,8 @@
-import { Interaction, CommandInteraction, Constants } from 'discord.js';
+import { Interaction, CommandInteraction, ButtonInteraction, Constants } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import type { PieceContext } from '@sapphire/pieces';
 import { Events } from '../models/framework/lib/types/Events';
+import { InteractionManager } from '../models/InteractionManager';
 
 export default class InteractionCreate extends Listener<typeof Constants.Events.INTERACTION_CREATE> {
     constructor(context: PieceContext) {
@@ -13,6 +14,8 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
     public run(interaction: Interaction): void {
         if (interaction.isCommand()) {
             this.commandInteractionHandler(interaction);
+        } else if (interaction.isButton()) {
+            this.buttonInteractionHandler(interaction);
         }
     }
 
@@ -69,5 +72,12 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
         } finally {
             interaction.client.emit(Events.SlashCommandFinish, interaction, command, { ...payload, args });
         }
+    }
+
+    /**
+     * @param {ButtonInteraction} interaction
+     */
+    private async buttonInteractionHandler(interaction: ButtonInteraction): Promise<void> {
+        //
     }
 }
