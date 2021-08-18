@@ -20,4 +20,6 @@ describe('Client testing', async () => {
         jest.useFakeTimers();
         expect(client.user!.tag).toBe(idTagMap[client.user!.id]);
     });
+
+    await bootstrap.client.destroy();
 });
