@@ -5,23 +5,22 @@ const interactionManager: InteractionManager = new InteractionManager();
 
 describe('Testing the InteractionManager class', () => {
     test('Is correctly formed', () => {
-        expect(typeof InteractionManager).toBe('object');
-        expect(typeof InteractionManager.hasListeners).toBe('function');
-        expect(typeof InteractionManager.getButton).toBe('function');
-        expect(typeof InteractionManager.removeMessageComponentFromMessage).toBe('function');
+        expect(typeof InteractionManager).toBe('function');
+        expect(typeof interactionManager.hasListeners).toBe('function');
+        expect(typeof interactionManager.getButton).toBe('function');
+        expect(typeof interactionManager.removeMessageComponentFromMessage).toBe('function');
     });
 
     test('Returns the correct values', () => {
         const messageButton = interactionManager.getButton(messageButtonData);
-        const [callback] = interactionManager.listeners('testId');
+        const [callback] = interactionManager.listeners(messageButtonData.id);
 
-        expect(typeof messageButton).toBe('MessageButton');
-        expect(messageButton.id).toBe(messageButtonData.id);
+        expect(typeof messageButton).toBe('object');
+        expect(messageButton.customId).toBe(messageButtonData.id);
         expect(messageButton.style).toBe(messageButtonData.style);
         expect(messageButton.label).toBe(messageButtonData.label);
-        expect(callback()).toBe('testCallback');
+        expect(typeof callback).toBe('function');
 
-        expect(typeof interactionManager.hasListeners()).toBe('boolean');
-        expect(interactionManager.removeMessageComponentFromMessage()).toBeUndefined();
+        expect(typeof interactionManager.hasListeners(messageButtonData.id)).toBe('boolean');
     });
 });
