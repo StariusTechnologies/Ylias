@@ -1,9 +1,11 @@
 import Logger from '@lilywonhalf/pretty-logger';
 import { Bootstrap } from './models/Bootstrap';
 import { SlashCommandRegistrar } from './models/SlashCommandRegistrar';
+import path from 'path';
 
 const productionMode = process.argv.some(arg => arg.toLowerCase().includes('prod'));
-const bootstrap = new Bootstrap({ dotEnvPath: `${__dirname}/../${productionMode ? 'prod' : ''}.env` });
+const dotEnvPath = path.join(__dirname, '..', `${productionMode ? 'prod' : ''}.env`);
+const bootstrap = new Bootstrap({ dotEnvPath });
 const slashCommandRegistrar = new SlashCommandRegistrar();
 
 bootstrap.initializeClient();

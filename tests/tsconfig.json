@@ -7,7 +7,10 @@
         "paths": {
             "#mocks/*": ["./mocks/*"],
             "#root/*": ["../src/*"],
-            "#root/models/*": ["../src/models/*"]
+            "#root/models/*": ["../src/models/*"],
+            "#root/listeners/*": ["../src/listeners/*"],
+            "#root/slash-command-preconditions/*": ["../src/slash-command-preconditions/*"],
+            "#root/slash-commands/*": ["../src/slash-commands/*"]
         }
     },
     "include": [".", "../src/**/*"],

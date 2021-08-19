@@ -7,3 +7,4 @@ package-lock.json
 dist
 scripts
 .watchmanconfig
+jest.config.js

@@ -16,7 +16,7 @@
     "ccf": "npm run check-config-files",
     "update-config-files": "scripts/update-config-files.sh",
     "ucf": "npm run update-config-files",
-    "test": "jest"
+    "test": "jest --no-watchman"
   },
   "imports": {
     "#mocks/*": "./tests/mocks/*.js"
