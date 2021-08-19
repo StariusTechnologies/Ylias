@@ -1,10 +1,13 @@
 import { Interaction, CommandInteraction, ButtonInteraction, Constants } from 'discord.js';
+import type { Message } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import type { PieceContext } from '@sapphire/pieces';
 import { Events } from '../models/framework/lib/types/Events';
 import { InteractionManager } from '../models/InteractionManager';
 
 export default class InteractionCreate extends Listener<typeof Constants.Events.INTERACTION_CREATE> {
+    private interactionManager: InteractionManager = new InteractionManager();
+
     constructor(context: PieceContext) {
         super(context, {
             event: Constants.Events.INTERACTION_CREATE,
@@ -78,6 +81,15 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
      * @param {ButtonInteraction} interaction
      */
     private async buttonInteractionHandler(interaction: ButtonInteraction): Promise<void> {
-        //
+        if (this.interactionManager.hasListeners(interaction.customId)) {
+            this.interactionManager.emit(interaction.customId, interaction);
+        } else {
+            await interaction.reply({
+                content: 'This button doesn\'t do anything anymore! You can try sending the command again.',
+                ephemeral: true,
+            });
+
+            await this.interactionManager.removeMessageComponentFromMessage(interaction.message as Message);
+        }
     }
 }

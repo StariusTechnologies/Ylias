@@ -17,7 +17,7 @@ const devToken = process.env.TOKEN;
 describe('Testing the Bootstrap class', () => {
     test('Different tokens for dev and prod environments', () => {
         expect(prodToken).not.toEqual(devToken);
-    })
+    });
 
     test('Is correctly formed', () => {
         expect(typeof bootstrap).toBe('object');

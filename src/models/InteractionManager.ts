@@ -1,30 +1,52 @@
-import { APIPartialEmoji } from 'discord-api-types';
+import type { APIPartialEmoji } from 'discord-api-types';
 import { MessageButton, Collection } from 'discord.js';
-import type { MessageButtonStyle, ButtonInteraction, TextBasedChannels } from 'discord.js';
+import type { Message, MessageEditOptions, MessageButtonStyle, ButtonInteraction, TextBasedChannels } from 'discord.js';
 import { EventEmitter } from 'stream';
 
-interface ButtonCreationData {
+export interface ButtonCreationData {
     id: string;
-    style: MessageButtonStyle;
-    label: string;
-    emoji: APIPartialEmoji;
-    callback: (interaction: ButtonInteraction) => void;
-    timeout: number;
+    style?: MessageButtonStyle;
+    label?: string;
+    emoji?: APIPartialEmoji;
+    callback?: (interaction: ButtonInteraction) => void;
+    timeout?: number;
     channel: TextBasedChannels;
 }
 
-export class InteractionManager {
-    static NO_BUTTON_TIMEOUT = 0;
-    static DEFAULT_BUTTON_TIMEOUT = 20 * 60000;
+export class InteractionManager extends EventEmitter{
+    private static readonly NO_BUTTON_TIMEOUT = 0;
+    private static readonly DEFAULT_BUTTON_TIMEOUT = 20 * 60000;
 
-    static buttons = new Collection();
+    private static buttons: Collection<string, MessageButton> = new Collection();
+    private static instance: InteractionManager;
+
+    constructor() {
+        super();
+
+        if (InteractionManager.instance) {
+            return InteractionManager.instance;
+        }
+
+        InteractionManager.instance = this;
+    }
+
+    /**
+     * @param {string} interactionId
+     *
+     * @returns {boolean}
+     */
+    public hasListeners(interactionId: string): boolean {
+        return this.listenerCount(interactionId) > 0;
+    }
 
     /**
      * @param {ButtonCreationData} data
      *
      * @returns {MessageButton}
      */
-    public async getButton({ id, style, label, emoji, callback, timeout, channel }: ButtonCreationData) {
+    public getButton(
+        { id, style, label, emoji, callback, timeout, channel }: ButtonCreationData
+    ): MessageButton {
         const button: any = InteractionManager.buttons.has(id)
             ? InteractionManager.buttons.get(id)
             : new MessageButton().setCustomId(id);
@@ -42,7 +64,7 @@ export class InteractionManager {
         }
 
         if (callback) {
-            EventEmitter.on(id, callback);
+            this.on(id, callback);
         }
 
         InteractionManager.buttons.set(id, button);
@@ -65,5 +87,24 @@ export class InteractionManager {
         }
 
         return button;
+    }
+
+    /**
+     * @param {Message} message
+     */
+    public removeMessageComponentFromMessage(message: Message): void {
+        const editOptions: MessageEditOptions = {
+            components: [],
+        };
+
+        if (message.content && message.content.length > 0) {
+            editOptions.content = message.content;
+        }
+
+        if (message.embeds && message.embeds.length > 0) {
+            editOptions.embeds = message.embeds;
+        }
+
+        message.edit(editOptions);
     }
 }

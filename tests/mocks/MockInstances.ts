@@ -5,11 +5,20 @@ import type { Store } from '@sapphire/pieces';
 import { ListenerStore } from '@sapphire/framework';
 import { SlashCommandPreconditionStore } from '#root/models/framework/lib/structures/SlashCommandPreconditionStore';
 import SlashCommandStore from '#root/models/framework/lib/structures/SlashCommandStore';
+import type { ButtonCreationData } from '#root/models/InteractionManager';
 
 const storesMap: {[key: string]: Store<Piece>} = {
     'listeners': new ListenerStore(),
     'slash-command-preconditions': new SlashCommandPreconditionStore(),
     'slash-commands': new SlashCommandStore(),
+};
+
+export const messageButtonData: ButtonCreationData = {
+    id: 'testId',
+    style: 'PRIMARY',
+    label: 'testLabel',
+    callback: () => 'testCallback',
+    channel: {},
 };
 
 export const getPieceContext = (relativePath: string): PieceContext => {
