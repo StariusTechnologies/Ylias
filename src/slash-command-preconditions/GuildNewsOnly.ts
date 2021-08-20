@@ -5,7 +5,7 @@ import {
     SlashCommandPreconditionResult
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
-export class CorePrecondition extends SlashCommandPrecondition {
+export class GuildNewsOnlyPrecondition extends SlashCommandPrecondition {
     private readonly allowedTypes: TextBasedChannels['type'][] = ['GUILD_NEWS', 'GUILD_NEWS_THREAD'];
 
     public run(interaction: CommandInteraction): SlashCommandPreconditionResult {

@@ -4,7 +4,7 @@ import { Identifiers } from '../models/framework/lib/errors/Identifiers';
 import type { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { SlashCommandPrecondition } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
-export class CorePrecondition extends SlashCommandPrecondition {
+export class EnabledPrecondition extends SlashCommandPrecondition {
     public constructor(context: PieceContext) {
         super(context, { position: 10 });
     }

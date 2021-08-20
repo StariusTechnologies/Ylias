@@ -24,7 +24,9 @@ describe('Testing the Bootstrap class', () => {
         expect(typeof bootstrap.initializeIntents).toBe('function');
         expect(typeof bootstrap.initializeClient).toBe('function');
         expect(typeof bootstrap.login).toBe('function');
+    });
 
+    test('Returns the correct values', () => {
         expect(bootstrap.initializeIntents()).toBeUndefined();
         expect(bootstrap.initializeClient()).toBeUndefined();
     });

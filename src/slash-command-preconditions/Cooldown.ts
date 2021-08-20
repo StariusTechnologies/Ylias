@@ -15,7 +15,7 @@ interface SlashCommandCooldownContext extends SlashCommandPreconditionContext {
     limit?: number;
 }
 
-export class CorePrecondition extends SlashCommandPrecondition {
+export class CooldownPrecondition extends SlashCommandPrecondition {
     public buckets = new WeakMap<SlashCommand, RateLimitManager<string>>();
 
     public run(

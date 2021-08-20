@@ -5,7 +5,7 @@ import {
     SlashCommandPreconditionResult
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
-export class CorePrecondition extends SlashCommandPrecondition {
+export class GuildPrivateThreadOnlyPrecondition extends SlashCommandPrecondition {
     public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
         return interaction.channel?.isThread() && interaction.channel?.type === 'GUILD_PRIVATE_THREAD'
             ? this.ok()

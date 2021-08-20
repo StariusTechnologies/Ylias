@@ -1,7 +1,7 @@
 import { InteractionManager } from '#root/models/InteractionManager';
 import { messageButtonData } from '#mocks/MockInstances';
 
-const interactionManager: InteractionManager = new InteractionManager();
+const interactionManager = new InteractionManager();
 
 describe('Testing the InteractionManager class', () => {
     test('Is correctly formed', () => {

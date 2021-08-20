@@ -33,6 +33,7 @@ export const messageButtonData: ButtonCreationData = {
     label: 'testLabel',
     callback: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
     channel: textChannel,
+    timeout: 0,
 };
 
 export const getPieceContext = (relativePath: string): PieceContext => {

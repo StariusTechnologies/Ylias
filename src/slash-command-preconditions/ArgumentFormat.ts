@@ -26,7 +26,7 @@ declare module '../models/framework/lib/structures/SlashCommandPrecondition' {
     }
 }
 
-export class CorePrecondition extends SlashCommandPrecondition {
+export class ArgumentFormatPrecondition extends SlashCommandPrecondition {
     public run(
         interaction: CommandInteraction,
         _: SlashCommand,

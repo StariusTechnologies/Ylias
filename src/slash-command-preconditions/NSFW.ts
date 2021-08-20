@@ -5,7 +5,7 @@ import {
     SlashCommandPreconditionResult
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
-export class CorePrecondition extends SlashCommandPrecondition {
+export class NSFWPrecondition extends SlashCommandPrecondition {
     public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
         // `nsfw` is undefined in DMChannel, writing `=== true` will result in it returning`false`.
         return interaction.channel && Reflect.get(interaction.channel, 'nsfw') === true

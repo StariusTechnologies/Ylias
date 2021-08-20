@@ -5,7 +5,7 @@ import {
     SlashCommandPreconditionResult
 } from '../models/framework/lib/structures/SlashCommandPrecondition';
 
-export class CorePrecondition extends SlashCommandPrecondition {
+export class GuildOnlyPrecondition extends SlashCommandPrecondition {
     public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
         return interaction.guild === null
             ? this.error({
