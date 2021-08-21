@@ -1,12 +1,21 @@
-import { Collection, CommandInteraction, User } from 'discord.js';
+import { Collection, CommandInteraction, User, MessageActionRow } from 'discord.js';
+import type { MessageButton, WebhookEditMessageOptions } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
+import { InteractionManager } from '../models/InteractionManager';
 import { Emotion, Emotions } from '../models/Emotion';
+
+interface UserSlotsData {
+    attempts: number;
+    firstAttemptTime: Date;
+    processing: boolean;
+    button?: MessageButton;
+}
 
 export default class SlotsCommand extends SlashCommand {
     private static MAX_ATTEMPTS = 5;
-    private static attempts: Collection<User, number>;
-    private static firstAttemptTime: Collection<User, Date>;
+    private static usersSlotsData: Collection<User, UserSlotsData>;
+    private static interactionManager: InteractionManager = new InteractionManager();
     private static emojis: Array<string> = [
         ':dog:',
         ':cat:',
@@ -82,12 +91,8 @@ export default class SlotsCommand extends SlashCommand {
             description: `Wanna play slot machines? Well, there is no money implied but it's still fun.`,
         });
 
-        if (!SlotsCommand.attempts) {
-            SlotsCommand.attempts = new Collection<User, number>();
-        }
-
-        if (!SlotsCommand.firstAttemptTime) {
-            SlotsCommand.firstAttemptTime = new Collection<User, Date>();
+        if (!SlotsCommand.usersSlotsData) {
+            SlotsCommand.usersSlotsData = new Collection<User, UserSlotsData>();
         }
     }
 
@@ -100,34 +105,42 @@ export default class SlotsCommand extends SlashCommand {
         return yearHasPassed || monthHasPassed || dayHasPassed;
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    private async playSlots(interaction: CommandInteraction) {
         const { user } = interaction;
+        const userSlotsData = SlotsCommand.usersSlotsData.has(user)
+            ? SlotsCommand.usersSlotsData.get(user)
+            : SlotsCommand.usersSlotsData.set(user, {
+                attempts: 0,
+                firstAttemptTime: new Date,
+                processing: false,
+            }).get(user);
 
-        if (!SlotsCommand.attempts.has(user)) {
-            SlotsCommand.attempts.set(user, 0);
+        if (userSlotsData!.processing) {
+            return;
         }
 
-        if (!SlotsCommand.firstAttemptTime.has(user)) {
-            SlotsCommand.firstAttemptTime.set(user, new Date);
+        userSlotsData!.processing = true;
+
+        if (this.isDateBeforeToday(userSlotsData!.firstAttemptTime)) {
+            userSlotsData!.attempts = 0;
+            userSlotsData!.firstAttemptTime = new Date;
         }
 
-        if (this.isDateBeforeToday(SlotsCommand.firstAttemptTime.get(user)!)) {
-            SlotsCommand.attempts.set(user, 0);
-            SlotsCommand.firstAttemptTime.set(user, new Date);
-        }
+        if (userSlotsData!.attempts >= SlotsCommand.MAX_ATTEMPTS) {
+            const comeBackEmbed = Emotion.getEmotionEmbed(Emotions.WINK).setTitle('Come back tomorrow!').setDescription(
+                `You tried too hard today, ${user.username}, come back tomorrow :D !`
+            );
 
-        if (SlotsCommand.attempts.get(user)! >= SlotsCommand.MAX_ATTEMPTS) {
-            await interaction.reply({
-                embeds: [Emotion.getEmotionEmbed(Emotions.WINK).setTitle('Come back tomorrow!').setDescription(
-                    `You tried too hard today, ${user.username}, come back tomorrow :D !`
-                )],
-                ephemeral: true,
-            });
+            if (interaction.replied) {
+                await interaction.editReply({ embeds: [comeBackEmbed] } );
+            } else {
+                await interaction.reply({ embeds: [comeBackEmbed] });
+            }
 
             return;
         }
 
-        SlotsCommand.attempts.set(user, SlotsCommand.attempts.get(user)! + 1);
+        userSlotsData!.attempts++;
 
         const firstEmoji: string = SlotsCommand.emojis[Math.floor(Math.random() * SlotsCommand.emojis.length)];
         const secondEmoji: string = SlotsCommand.emojis[Math.floor(Math.random() * SlotsCommand.emojis.length)];
@@ -135,17 +148,59 @@ export default class SlotsCommand extends SlashCommand {
 
         const won = firstEmoji == secondEmoji && secondEmoji == thirdEmoji;
         const result = won ? ':sparkles: **JACKPOT** :sparkles:' : ':x: **TRY AGAIN** :x:';
-        const embed = Emotion.getEmotionEmbed(won ? Emotions.SURPRISE : Emotions.WINK)
+        const firstEmbed = Emotion.getEmotionEmbed(Emotions.NEUTRAL)
             .setTitle('Slots machine')
             .setDescription(
-                `${firstEmoji}${secondEmoji}${thirdEmoji}\n${result}`
+                `${firstEmoji}:question::question:`
             );
-        const reply: any = { embeds: [embed] };
+        const secondEmbed = Emotion.getEmotionEmbed(Emotions.NEUTRAL)
+            .setTitle('Slots machine')
+            .setDescription(
+                `${firstEmoji}${secondEmoji}:question:`
+            );
+        const thirdEmbed = Emotion.getEmotionEmbed(won ? Emotions.SURPRISE : Emotions.WINK)
+            .setTitle('Slots machine')
+            .setDescription(
+                `${firstEmoji}${secondEmoji}${thirdEmoji} \n${result}`
+            );
 
-        if (won) {
-            reply.content = interaction.client.users.cache.get(process.env.MOM as string)!.toString();
+        if (interaction.replied) {
+            await interaction.editReply({ embeds: [firstEmbed] });
+        } else {
+            await interaction.reply({ embeds: [firstEmbed] });
         }
 
-        await interaction.reply(reply);
+        const editedReply: WebhookEditMessageOptions = { embeds: [secondEmbed] };
+
+        await interaction.editReply(editedReply);
+
+        if (!userSlotsData!.button) {
+            userSlotsData!.button = SlotsCommand.interactionManager.getButton({
+                id: `playSlotsAgain${interaction.id}`,
+                style: 'PRIMARY',
+                label: 'Replay',
+                emoji: '🔁',
+                channel: interaction.channel!,
+                callback: () => this.playSlots(interaction),
+            });
+        }
+
+        if (won) {
+            editedReply.content = interaction.client.users.cache.get(process.env.MOM as string)!.toString();
+        }
+
+        editedReply.embeds = [thirdEmbed];
+
+        if (!won) {
+            editedReply.components = [new MessageActionRow().addComponents(userSlotsData!.button)];
+        }
+
+        await interaction.editReply(editedReply);
+
+        userSlotsData!.processing = false;
+    }
+
+    public async run(interaction: CommandInteraction): Promise<void> {
+        await this.playSlots(interaction);
     }
 }

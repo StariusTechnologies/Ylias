@@ -1,13 +1,19 @@
-import type { APIPartialEmoji } from 'discord-api-types';
-import { MessageButton, Collection } from 'discord.js';
-import type { Message, MessageEditOptions, MessageButtonStyle, ButtonInteraction, TextBasedChannels } from 'discord.js';
+import { Message, MessageButton, Collection } from 'discord.js';
 import { EventEmitter } from 'stream';
+import type { APIPartialEmoji } from 'discord-api-types';
+import type {
+    MessageEditOptions,
+    MessageButtonStyle,
+    ButtonInteraction,
+    TextBasedChannels,
+    Emoji
+} from 'discord.js';
 
 export interface ButtonCreationData {
     id: string;
     style?: MessageButtonStyle;
     label?: string;
-    emoji?: APIPartialEmoji;
+    emoji?: string | Emoji | APIPartialEmoji;
     callback?: (interaction: ButtonInteraction) => void;
     timeout?: number;
     channel: TextBasedChannels;
@@ -71,12 +77,16 @@ export class InteractionManager extends EventEmitter{
         timeout = timeout ?? InteractionManager.DEFAULT_BUTTON_TIMEOUT;
 
         if (timeout > InteractionManager.NO_BUTTON_TIMEOUT) {
-            setTimeout(() => {
-                const message = channel.messages.cache.find(message => {
+            setTimeout(async () => {
+                let message = await channel.messages.cache.find(message => {
                     return message.components.some(
                         row => row.components.some(component => component.customId === id)
-                    )
+                    );
                 });
+
+                if (!(message instanceof Message)) {
+                    message = await channel.messages.fetch(message!.id);
+                }
 
                 if (message) {
                     this.removeMessageComponentFromMessage(message);

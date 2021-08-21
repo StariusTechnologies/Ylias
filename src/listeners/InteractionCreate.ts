@@ -1,9 +1,10 @@
-import { Interaction, CommandInteraction, ButtonInteraction, Constants } from 'discord.js';
+import { Interaction, CommandInteraction, ButtonInteraction, Constants, TextChannel } from 'discord.js';
 import type { Message } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import type { PieceContext } from '@sapphire/pieces';
 import { Events } from '../models/framework/lib/types/Events';
 import { InteractionManager } from '../models/InteractionManager';
+import type { APIMessage } from 'discord-api-types';
 
 export default class InteractionCreate extends Listener<typeof Constants.Events.INTERACTION_CREATE> {
     private interactionManager: InteractionManager = new InteractionManager();
@@ -84,12 +85,31 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
         if (this.interactionManager.hasListeners(interaction.customId)) {
             this.interactionManager.emit(interaction.customId, interaction);
         } else {
-            await interaction.reply({
-                content: 'This button doesn\'t do anything anymore! You can try sending the command again.',
-                ephemeral: true,
-            });
+            if (interaction.replied) {
+                await interaction.editReply({
+                    content: 'This button doesn\'t do anything anymore! You can try sending the command again.',
+                    components: [],
+                });
+            } else {
+                await interaction.reply({
+                    content: 'This button doesn\'t do anything anymore! You can try sending the command again.',
+                    components: [],
+                    ephemeral: true,
+                });
+            }
 
-            await this.interactionManager.removeMessageComponentFromMessage(interaction.message as Message);
+            const interactionMessage = interaction.message;
+            let message: Message = interactionMessage as Message;
+
+            if ((interactionMessage as APIMessage).channel_id) {
+                const apiMessage: APIMessage = interactionMessage as APIMessage;
+                const channelId = apiMessage.channel_id;
+                const channel: TextChannel = await interaction.client.channels.fetch(channelId) as TextChannel;
+
+                message = await channel.messages.fetch(apiMessage.id);
+            }
+
+            this.interactionManager.removeMessageComponentFromMessage(message);
         }
     }
 }
