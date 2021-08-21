@@ -82,7 +82,7 @@ export default class PingCommand extends SlashCommand {
             }
         }
 
-        if (vowelRegexp.test(scream)) {
+        if (scream.match(vowelRegexp)) {
             let vowel;
             let vowelPosition = 0;
             let regexpResult;
