@@ -1,6 +1,6 @@
-import { Message, MessageButton, Collection } from 'discord.js';
+import { Message, MessageButton, Collection, TextChannel } from 'discord.js';
 import { EventEmitter } from 'stream';
-import type { APIPartialEmoji } from 'discord-api-types';
+import type { APIPartialEmoji, APIMessage } from 'discord-api-types';
 import type {
     MessageEditOptions,
     MessageButtonStyle,
@@ -36,20 +36,10 @@ export class InteractionManager extends EventEmitter{
         InteractionManager.instance = this;
     }
 
-    /**
-     * @param {string} interactionId
-     *
-     * @returns {boolean}
-     */
     public hasListeners(interactionId: string): boolean {
         return this.listenerCount(interactionId) > 0;
     }
 
-    /**
-     * @param {ButtonCreationData} data
-     *
-     * @returns {MessageButton}
-     */
     public getButton(
         { id, style, label, emoji, callback, timeout, channel }: ButtonCreationData
     ): MessageButton {
@@ -78,15 +68,11 @@ export class InteractionManager extends EventEmitter{
 
         if (timeout > InteractionManager.NO_BUTTON_TIMEOUT) {
             setTimeout(async () => {
-                let message = await channel.messages.cache.find(message => {
+                const message = await channel.messages.cache.find(message => {
                     return message.components.some(
                         row => row.components.some(component => component.customId === id)
                     );
                 });
-
-                if (!(message instanceof Message)) {
-                    message = await channel.messages.fetch(message!.id);
-                }
 
                 if (message) {
                     this.removeMessageComponentFromMessage(message);
@@ -99,9 +85,6 @@ export class InteractionManager extends EventEmitter{
         return button;
     }
 
-    /**
-     * @param {Message} message
-     */
     public removeMessageComponentFromMessage(message: Message): void {
         const editOptions: MessageEditOptions = {
             components: [],
@@ -116,5 +99,33 @@ export class InteractionManager extends EventEmitter{
         }
 
         message.edit(editOptions);
+    }
+
+    public async handleUnboundButton(interaction: ButtonInteraction): Promise<void> {
+        if (interaction.replied) {
+            await interaction.editReply({
+                content: 'This button doesn\'t do anything anymore! You can try sending the command again.',
+                components: [],
+            });
+        } else {
+            await interaction.reply({
+                content: 'This button doesn\'t do anything anymore! You can try sending the command again.',
+                components: [],
+                ephemeral: true,
+            });
+        }
+
+        const interactionMessage = interaction.message;
+        let message: Message = interactionMessage as Message;
+
+        if ((interactionMessage as APIMessage).channel_id) {
+            const apiMessage: APIMessage = interactionMessage as APIMessage;
+            const channelId = apiMessage.channel_id;
+            const channel: TextChannel = await interaction.client.channels.fetch(channelId) as TextChannel;
+
+            message = await channel.messages.fetch(apiMessage.id);
+        }
+
+        this.removeMessageComponentFromMessage(message);
     }
 }

@@ -18,9 +18,6 @@
     "ucf": "npm run update-config-files",
     "test": "jest --no-watchman"
   },
-  "imports": {
-    "#mocks/*": "./tests/mocks/*.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LilyWonhalf/YliasDiscordBot.git"

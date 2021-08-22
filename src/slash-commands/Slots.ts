@@ -1,9 +1,17 @@
-import { Collection, CommandInteraction, User, MessageActionRow } from 'discord.js';
+import {
+    Collection,
+    CommandInteraction,
+    User,
+    MessageActionRow,
+    ButtonInteraction,
+    TextBasedChannels,
+} from 'discord.js';
 import type { MessageButton, WebhookEditMessageOptions } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { InteractionManager } from '../models/InteractionManager';
 import { Emotion, Emotions } from '../models/Emotion';
+import { sleep } from '../models/DateTimeUtils';
 
 interface UserSlotsData {
     attempts: number;
@@ -105,7 +113,7 @@ export default class SlotsCommand extends SlashCommand {
         return yearHasPassed || monthHasPassed || dayHasPassed;
     }
 
-    private async playSlots(interaction: CommandInteraction) {
+    private async playSlots(interaction: CommandInteraction | ButtonInteraction) {
         const { user } = interaction;
         const userSlotsData = SlotsCommand.usersSlotsData.has(user)
             ? SlotsCommand.usersSlotsData.get(user)
@@ -132,10 +140,12 @@ export default class SlotsCommand extends SlashCommand {
             );
 
             if (interaction.replied) {
-                await interaction.editReply({ embeds: [comeBackEmbed] } );
+                await interaction.editReply({ embeds: [comeBackEmbed], components: [] } );
             } else {
                 await interaction.reply({ embeds: [comeBackEmbed] });
             }
+
+            userSlotsData!.processing = false;
 
             return;
         }
@@ -172,18 +182,8 @@ export default class SlotsCommand extends SlashCommand {
 
         const editedReply: WebhookEditMessageOptions = { embeds: [secondEmbed] };
 
+        await sleep(500);
         await interaction.editReply(editedReply);
-
-        if (!userSlotsData!.button) {
-            userSlotsData!.button = SlotsCommand.interactionManager.getButton({
-                id: `playSlotsAgain${interaction.id}`,
-                style: 'PRIMARY',
-                label: 'Replay',
-                emoji: '🔁',
-                channel: interaction.channel!,
-                callback: () => this.playSlots(interaction),
-            });
-        }
 
         if (won) {
             editedReply.content = interaction.client.users.cache.get(process.env.MOM as string)!.toString();
@@ -191,10 +191,31 @@ export default class SlotsCommand extends SlashCommand {
 
         editedReply.embeds = [thirdEmbed];
 
+        if (!userSlotsData!.button) {
+            let { channel } = interaction;
+
+            if (!channel) {
+                channel = await interaction.client.channels.fetch(interaction.channelId!) as TextBasedChannels;
+            }
+
+            userSlotsData!.button = SlotsCommand.interactionManager.getButton({
+                id: `playSlotsAgain${interaction.id}`,
+                style: 'PRIMARY',
+                label: 'Play again',
+                emoji: '🔁',
+                channel,
+                callback: (buttonInteraction) => {
+                    buttonInteraction.deferUpdate();
+                    this.playSlots(interaction);
+                },
+            });
+        }
+
         if (!won) {
             editedReply.components = [new MessageActionRow().addComponents(userSlotsData!.button)];
         }
 
+        await sleep(500);
         await interaction.editReply(editedReply);
 
         userSlotsData!.processing = false;
