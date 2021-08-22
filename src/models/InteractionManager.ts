@@ -8,6 +8,7 @@ import type {
     TextBasedChannels,
     Emoji
 } from 'discord.js';
+import { MINUTE } from '../models/DateTimeUtils';
 
 export interface ButtonCreationData {
     id: string;
@@ -21,7 +22,7 @@ export interface ButtonCreationData {
 
 export class InteractionManager extends EventEmitter{
     private static readonly NO_BUTTON_TIMEOUT = 0;
-    private static readonly DEFAULT_BUTTON_TIMEOUT = 20 * 60000;
+    private static readonly DEFAULT_BUTTON_TIMEOUT = 20 * MINUTE;
 
     private static buttons: Collection<string, MessageButton> = new Collection();
     private static instance: InteractionManager;

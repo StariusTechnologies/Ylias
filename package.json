@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LilyWonhalf/YliasDiscordBot.git"
+    "url": "git+https://github.com/StariusTechnologies/Ylias.git"
   },
   "keywords": [
     "ylias",
@@ -32,9 +32,9 @@
   "author": "Lily Wonhalf <lilywonhalf@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LilyWonhalf/YliasDiscordBot/issues"
+    "url": "https://github.com/StariusTechnologies/Ylias/issues"
   },
-  "homepage": "https://github.com/LilyWonhalf/YliasDiscordBot#readme",
+  "homepage": "https://github.com/StariusTechnologies/Ylias#readme",
   "dependencies": {
     "@discordjs/rest": "^0.1.0-canary.0",
     "@lilywonhalf/pretty-logger": "^2.0",
