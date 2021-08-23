@@ -75,7 +75,11 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
 
     private buttonInteractionHandler(interaction: ButtonInteraction): void {
         if (this.interactionManager.hasListeners(interaction.customId)) {
-            this.interactionManager.emit(interaction.customId, interaction);
+            try {
+                this.interactionManager.emit(interaction.customId, interaction);
+            } catch (error) {
+                interaction.client.emit(Events.ButtonError, error, interaction);
+            }
         } else {
             this.interactionManager.handleUnboundButton(interaction);
         }

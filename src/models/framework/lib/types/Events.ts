@@ -66,6 +66,7 @@ export const Events = {
     SlashCommandAccepted: 'slashCommandAccepted' as const,
     SlashCommandDenied: 'slashCommandDenied' as const,
     SlashCommandError: 'slashCommandError' as const,
+    ButtonError: 'buttonError' as const,
     SlashCommandFinish: 'slashCommandFinish' as const,
     SlashCommandRun: 'slashCommandRun' as const,
     SlashCommandSuccess: 'slashCommandSuccess' as const,
@@ -149,6 +150,7 @@ declare module 'discord.js' {
         ];
         [Events.SlashCommandSuccess]: [payload: SlashCommandSuccessPayload];
         [Events.SlashCommandError]: [error: Error, payload: SlashCommandErrorPayload];
+        [Events.ButtonError]: [error: Error, interaction: ButtonInteraction];
         [Events.SlashCommandFinish]: [
             interaction: CommandInteraction,
             command: SlashCommand,
