@@ -29,7 +29,7 @@ type BootstrapOptions = {
 export class Bootstrap {
     private static instance: Bootstrap;
 
-    public readonly client!: SapphireClient;
+    public client!: SapphireClient;
     private intents: number[] = [];
 
     public constructor({ dotEnvPath }: BootstrapOptions = {}) {
@@ -42,12 +42,6 @@ export class Bootstrap {
         } else {
             configureEnvironment();
         }
-
-        this.intents;
-        this.client = new SapphireClient({
-            intents: this.intents,
-            defaultPrefix: '.',
-        });
 
         Bootstrap.instance = this;
     }
@@ -71,6 +65,10 @@ export class Bootstrap {
     }
 
     public initializeClient(): void {
+        this.client = new SapphireClient({
+            intents: this.intents,
+        });
+
         this.client.stores.registerPath(join(__dirname, 'framework', 'errorListeners'));
         this.client.stores.register(new SlashCommandStore());
         this.client.stores.register(new SlashCommandPreconditionStore());
