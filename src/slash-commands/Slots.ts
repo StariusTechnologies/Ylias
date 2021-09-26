@@ -1,11 +1,4 @@
-import {
-    Collection,
-    CommandInteraction,
-    User,
-    MessageActionRow,
-    ButtonInteraction,
-    TextBasedChannels,
-} from 'discord.js';
+import { Collection, CommandInteraction, User, MessageActionRow, ButtonInteraction, Message, TextBasedChannels } from 'discord.js';
 import type { MessageButton, WebhookEditMessageOptions } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
 import { SlashCommand } from '#framework/lib/structures/SlashCommand';
@@ -122,6 +115,12 @@ export default class SlotsCommand extends SlashCommand {
                 firstAttemptTime: new Date,
                 processing: false,
             }).get(user);
+        let message: Message;
+
+        if (interaction.isButton()) {
+            message = interaction.channel!.messages.cache.get(interaction.message.id)
+                ?? await interaction.channel!.messages.fetch(interaction.message.id);
+        }
 
         if (userSlotsData!.processing) {
             return;
@@ -139,10 +138,10 @@ export default class SlotsCommand extends SlashCommand {
                 `You tried too hard today, ${user.username}, come back tomorrow :D !`
             );
 
-            if (interaction.replied) {
-                await interaction.editReply({ embeds: [comeBackEmbed], components: [] } );
+            if (interaction.isButton()) {
+                await message!.edit({ embeds: [comeBackEmbed], components: [] } );
             } else {
-                await interaction.reply({ embeds: [comeBackEmbed] });
+                await interaction.reply({ embeds: [comeBackEmbed], components: [] });
             }
 
             userSlotsData!.processing = false;
@@ -174,8 +173,8 @@ export default class SlotsCommand extends SlashCommand {
                 `${firstEmoji}${secondEmoji}${thirdEmoji} \n${result}`
             );
 
-        if (interaction.replied) {
-            await interaction.editReply({ embeds: [firstEmbed] });
+        if (interaction.isButton()) {
+            await message!.edit({ embeds: [firstEmbed] });
         } else {
             await interaction.reply({ embeds: [firstEmbed] });
         }
@@ -183,7 +182,12 @@ export default class SlotsCommand extends SlashCommand {
         const editedReply: WebhookEditMessageOptions = { embeds: [secondEmbed] };
 
         await sleep(500);
-        await interaction.editReply(editedReply);
+
+        if (interaction.isButton()) {
+            await message!.edit(editedReply);
+        } else {
+            await interaction.editReply(editedReply);
+        }
 
         if (won) {
             editedReply.content = interaction.client.users.cache.get(process.env.MOM as string)!.toString();
@@ -206,7 +210,7 @@ export default class SlotsCommand extends SlashCommand {
                 channel,
                 callback: (buttonInteraction) => {
                     buttonInteraction.deferUpdate();
-                    this.playSlots(interaction);
+                    this.playSlots(buttonInteraction);
                 },
             });
         }
@@ -216,7 +220,12 @@ export default class SlotsCommand extends SlashCommand {
         }
 
         await sleep(500);
-        await interaction.editReply(editedReply);
+
+        if (interaction.isButton()) {
+            await message!.edit(editedReply);
+        } else {
+            await interaction.editReply(editedReply);
+        }
 
         userSlotsData!.processing = false;
     }
