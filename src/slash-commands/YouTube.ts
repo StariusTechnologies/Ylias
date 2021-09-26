@@ -2,9 +2,9 @@ import type { CommandInteraction } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
-import { Emotion, Emotions } from '../models/Emotion';
 import Logger from '@lilywonhalf/pretty-logger';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
+import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class YouTubeCommand extends SlashCommand {
     private static readonly YOUTUBE_VIDEO_KIND = 'youtube#video';

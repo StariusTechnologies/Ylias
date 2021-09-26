@@ -1,4 +1,4 @@
-import { Emotion, Emotions } from '#root/models/Emotion';
+import { Emotion, Emotions } from '#lib/Emotion';
 import { MessageEmbed } from 'discord.js';
 
 describe('Testing the Emotion class', () => {

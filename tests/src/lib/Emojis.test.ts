@@ -1,4 +1,4 @@
-import Emojis from '#root/models/Emojis';
+import Emojis from '#lib/Emojis';
 
 describe('Testing the Emojis class', () => {
     test('Is correctly formed', () => {

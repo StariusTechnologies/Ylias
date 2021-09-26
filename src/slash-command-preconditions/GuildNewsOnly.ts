@@ -1,9 +1,9 @@
 import type { CommandInteraction, TextBasedChannels } from 'discord.js';
-import { Identifiers } from '../models/framework/lib/errors/Identifiers';
+import { Identifiers } from '#framework/lib/errors/Identifiers';
 import {
     SlashCommandPrecondition,
     SlashCommandPreconditionResult
-} from '../models/framework/lib/structures/SlashCommandPrecondition';
+} from '#framework/lib/structures/SlashCommandPrecondition';
 
 export class GuildNewsOnlyPrecondition extends SlashCommandPrecondition {
     private readonly allowedTypes: TextBasedChannels['type'][] = ['GUILD_NEWS', 'GUILD_NEWS_THREAD'];

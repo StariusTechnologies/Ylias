@@ -1,7 +1,7 @@
 import { Constants, Guild, MessageOptions } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import type { PieceContext } from '@sapphire/pieces';
-import { Emotion, Emotions } from '../models/Emotion';
+import { Emotion, Emotions } from '#lib/Emotion';
 import Logger from '@lilywonhalf/pretty-logger';
 
 export default class MessageCreate extends Listener<typeof Constants.Events.GUILD_CREATE> {

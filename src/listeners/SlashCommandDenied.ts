@@ -1,7 +1,7 @@
 import { Listener, UserError } from '@sapphire/framework';
 import type { PieceContext } from '@sapphire/pieces';
-import { Events, SlashCommandDeniedPayload } from '../models/framework/lib/types/Events';
-import { Emotion, Emotions } from '../models/Emotion';
+import { Events, SlashCommandDeniedPayload } from '#lib/framework/lib/types/Events';
+import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class SlashCommandDenied extends Listener<typeof Events.SlashCommandDenied> {
     constructor(context: PieceContext) {

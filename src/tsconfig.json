@@ -6,7 +6,9 @@
         "rootDir": ".",
         "baseUrl": ".",
         "paths": {
-            "#root/*": ["*"]
+            "#root/*": ["*"],
+            "#lib/*": ["lib/*"],
+            "#framework/*": ["lib/framework/*"]
         },
         "composite": true
     },

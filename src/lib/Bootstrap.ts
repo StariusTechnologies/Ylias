@@ -8,8 +8,8 @@ import {
     SapphireClient
 } from '@sapphire/framework';
 import { config as configureEnvironment } from 'dotenv';
-import SlashCommandStore from './framework/lib/structures/SlashCommandStore';
-import { SlashCommandPreconditionStore } from './framework/lib/structures/SlashCommandPreconditionStore';
+import SlashCommandStore from '#framework/lib/structures/SlashCommandStore';
+import { SlashCommandPreconditionStore } from '#framework/lib/structures/SlashCommandPreconditionStore';
 
 declare module '@sapphire/pieces' {
     interface StoreRegistryEntries {

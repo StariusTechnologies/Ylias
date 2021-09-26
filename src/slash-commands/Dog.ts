@@ -1,9 +1,9 @@
 import type { CommandInteraction } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
-import { Emotion, Emotions } from '../models/Emotion';
+import { Emotion, Emotions } from '#lib/Emotion';
 import Logger from '@lilywonhalf/pretty-logger';
 
 export default class DogCommand extends SlashCommand {

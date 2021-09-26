@@ -1,7 +1,7 @@
 import type { CommandInteraction, Message } from 'discord.js';
 import type { APIMessage } from 'discord-api-types';
 import type { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 
 export default class PingCommand extends SlashCommand {
     constructor(context: PieceContext) {

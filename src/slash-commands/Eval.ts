@@ -1,7 +1,7 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import Logger from '@lilywonhalf/pretty-logger';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 
 export default class EvalCommand extends SlashCommand {
     constructor(context: PieceContext) {

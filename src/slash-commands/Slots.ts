@@ -8,10 +8,10 @@ import {
 } from 'discord.js';
 import type { MessageButton, WebhookEditMessageOptions } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
-import { InteractionManager } from '../models/InteractionManager';
-import { Emotion, Emotions } from '../models/Emotion';
-import { sleep } from '../models/DateTimeUtils';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
+import { InteractionManager } from '#lib/InteractionManager';
+import { Emotion, Emotions } from '#lib/Emotion';
+import { sleep } from '#lib/DateTimeUtils';
 
 interface UserSlotsData {
     attempts: number;

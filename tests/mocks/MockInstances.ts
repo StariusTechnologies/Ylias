@@ -4,13 +4,13 @@ import type { Piece } from '@sapphire/framework';
 import type { Store } from '@sapphire/pieces';
 import { TextChannel, Guild } from 'discord.js';
 import { ListenerStore } from '@sapphire/framework';
-import { SlashCommandPreconditionStore } from '#root/models/framework/lib/structures/SlashCommandPreconditionStore';
-import SlashCommandStore from '#root/models/framework/lib/structures/SlashCommandStore';
-import type { ButtonCreationData } from '#root/models/InteractionManager';
-import { Bootstrap } from '#root/models/Bootstrap';
 import type { APIPartialChannel } from 'discord-api-types';
 import { ChannelType } from 'discord-api-types';
 import type { RawGuildData } from 'discord.js/typings/rawDataTypes';
+import { SlashCommandPreconditionStore } from '#framework/lib/structures/SlashCommandPreconditionStore';
+import SlashCommandStore from '#framework/lib/structures/SlashCommandStore';
+import type { ButtonCreationData } from '#lib/InteractionManager';
+import { Bootstrap } from '#lib/Bootstrap';
 
 const storesMap: {[key: string]: Store<Piece>} = {
     'listeners': new ListenerStore(),
@@ -20,6 +20,8 @@ const storesMap: {[key: string]: Store<Piece>} = {
 
 const devDotEnvPath = path.join(__dirname, '..', '..', '..', '.env');
 const bootstrap = new Bootstrap({ dotEnvPath: devDotEnvPath });
+
+bootstrap.initializeClient();
 
 const rawGuildData: RawGuildData = { id: '123456789012345678', unavailable: true };
 const apiPartialChannel: APIPartialChannel = { id: '123456789012345678', type: ChannelType.GuildText, name: 'test' };

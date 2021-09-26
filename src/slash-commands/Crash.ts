@@ -1,7 +1,7 @@
 import type { CommandInteraction } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
-import { Emotion, Emotions } from '../models/Emotion';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
+import { Emotion, Emotions } from '#lib/Emotion';
 import { BucketScope } from '@sapphire/framework';
 
 export default class CrashCommand extends SlashCommand {

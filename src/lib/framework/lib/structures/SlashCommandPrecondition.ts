@@ -3,7 +3,7 @@ import type { Awaited } from '@sapphire/utilities';
 import { BucketScope, err, ok, Result, UserError } from '@sapphire/framework';
 import type { CommandInteraction } from 'discord.js';
 import type { SlashCommand } from './SlashCommand';
-import { SlashCommandPreconditionError } from '../errors/SlashCommandPreconditionError';
+import { SlashCommandPreconditionError } from '#framework/lib/errors/SlashCommandPreconditionError';
 
 export type SlashCommandPreconditionResult = Awaited<Result<unknown, UserError>>;
 export type AsyncSlashCommandPreconditionResult = Promise<Result<unknown, UserError>>;

@@ -1,10 +1,10 @@
 import { Collection, CommandInteraction } from 'discord.js';
-import type { SlashCommand } from '../structures/SlashCommand';
+import type { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import type {
     SlashCommandPreconditionContext,
     SlashCommandPreconditionKeys,
     SimpleSlashCommandPreconditionKeys
-} from '../structures/SlashCommandPrecondition';
+} from '#framework/lib/structures/SlashCommandPrecondition';
 import type { ISlashCommandPreconditionCondition } from './conditions/ISlashCommandPreconditionCondition';
 import { SlashCommandPreconditionConditionAnd } from './conditions/SlashCommandPreconditionConditionAnd';
 import { SlashCommandPreconditionConditionOr } from './conditions/SlashCommandPreconditionConditionOr';

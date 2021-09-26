@@ -1,6 +1,6 @@
 import type { PieceContext } from '@sapphire/pieces';
 import { Listener } from '@sapphire/framework';
-import { SlashCommandErrorPayload, Events } from '../lib/types/Events';
+import { SlashCommandErrorPayload, Events } from '#framework/lib/types/Events';
 
 export class CoreEvent extends Listener<typeof Events.SlashCommandError> {
     public constructor(context: PieceContext) {

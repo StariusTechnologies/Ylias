@@ -1,12 +1,12 @@
 import { container } from '@sapphire/pieces';
 import type { CommandInteraction } from 'discord.js';
-import type { SlashCommand } from '../structures/SlashCommand';
+import type { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import type {
     SlashCommandPreconditionContext,
     SlashCommandPreconditionKeys,
     SlashCommandPreconditions,
     SimpleSlashCommandPreconditionKeys
-} from '../structures/SlashCommandPrecondition';
+} from '#framework/lib/structures/SlashCommandPrecondition';
 import type {
     ISlashCommandPreconditionContainer,
     SlashCommandPreconditionContainerReturn

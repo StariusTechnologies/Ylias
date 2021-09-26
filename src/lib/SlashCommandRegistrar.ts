@@ -5,8 +5,8 @@ import { Routes } from 'discord-api-types/v9';
 import type { Snowflake } from 'discord-api-types/globals';
 import type { APIApplicationCommandOption } from 'discord-api-types/payloads/v8/_interactions/slashCommands';
 import type { SapphireClient } from '@sapphire/framework';
-import type { SlashCommand } from './framework/lib/structures/SlashCommand';
-import type SlashCommandStore from './framework/lib/structures/SlashCommandStore';
+import type { SlashCommand } from '#framework/lib/structures/SlashCommand';
+import type SlashCommandStore from '#framework/lib/structures/SlashCommandStore';
 
 export interface APIGuildApplicationCommand {
     id: Snowflake;

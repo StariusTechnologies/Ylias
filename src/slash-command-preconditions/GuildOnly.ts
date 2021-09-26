@@ -1,9 +1,9 @@
 import type { CommandInteraction } from 'discord.js';
-import { Identifiers } from '../models/framework/lib/errors/Identifiers';
+import { Identifiers } from '#framework/lib/errors/Identifiers';
 import {
     SlashCommandPrecondition,
     SlashCommandPreconditionResult
-} from '../models/framework/lib/structures/SlashCommandPrecondition';
+} from '#framework/lib/structures/SlashCommandPrecondition';
 
 export class GuildOnlyPrecondition extends SlashCommandPrecondition {
     public run(interaction: CommandInteraction): SlashCommandPreconditionResult {

@@ -1,8 +1,8 @@
 import type { PieceContext } from '@sapphire/pieces';
 import type { CommandInteraction } from 'discord.js';
-import { Identifiers } from '../models/framework/lib/errors/Identifiers';
-import type { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
-import { SlashCommandPrecondition } from '../models/framework/lib/structures/SlashCommandPrecondition';
+import { Identifiers } from '#framework/lib/errors/Identifiers';
+import type { SlashCommand } from '#framework/lib/structures/SlashCommand';
+import { SlashCommandPrecondition } from '#framework/lib/structures/SlashCommandPrecondition';
 
 export class EnabledPrecondition extends SlashCommandPrecondition {
     public constructor(context: PieceContext) {

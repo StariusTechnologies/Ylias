@@ -1,4 +1,4 @@
-import { InteractionManager } from '#root/models/InteractionManager';
+import { InteractionManager } from '#lib/InteractionManager';
 import { messageButtonData } from '#mocks/MockInstances';
 
 const interactionManager = new InteractionManager();

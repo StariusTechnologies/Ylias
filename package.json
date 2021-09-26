@@ -1,6 +1,6 @@
 {
   "name": "yliasdiscordbot",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Yet another Discord Bot",
   "main": "dist/index.js",
   "scripts": {
@@ -17,6 +17,11 @@
     "update-config-files": "scripts/update-config-files.sh",
     "ucf": "npm run update-config-files",
     "test": "jest --no-watchman"
+  },
+  "imports": {
+    "#root/*": "./dist/*.js",
+    "#lib/*": "./dist/lib/*.js",
+    "#framework/*": "./dist/lib/framework/*.js"
   },
   "repository": {
     "type": "git",

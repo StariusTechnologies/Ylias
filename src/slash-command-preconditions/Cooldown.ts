@@ -1,13 +1,13 @@
 import { RateLimitManager } from '@sapphire/ratelimits';
 import type { CommandInteraction } from 'discord.js';
 import { BucketScope } from '@sapphire/framework';
-import { Identifiers } from '../models/framework/lib/errors/Identifiers';
-import type { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
+import { Identifiers } from '#framework/lib/errors/Identifiers';
+import type { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import {
     SlashCommandPrecondition,
     SlashCommandPreconditionContext,
     SlashCommandPreconditionResult
-} from '../models/framework/lib/structures/SlashCommandPrecondition';
+} from '#framework/lib/structures/SlashCommandPrecondition';
 
 interface SlashCommandCooldownContext extends SlashCommandPreconditionContext {
     scope?: BucketScope;

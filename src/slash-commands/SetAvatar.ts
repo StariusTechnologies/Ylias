@@ -1,8 +1,8 @@
 import type { CommandInteraction } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { SlashCommandArgumentFormats } from '../slash-command-preconditions/ArgumentFormat';
-import { Emotion, Emotions } from '../models/Emotion';
+import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class SetAvatarCommand extends SlashCommand {
     constructor(context: PieceContext) {

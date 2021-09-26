@@ -1,4 +1,4 @@
-import { SlashCommandRegistrar } from '#root/models/SlashCommandRegistrar';
+import { SlashCommandRegistrar } from '#lib/SlashCommandRegistrar';
 
 const slashCommandRegistrar = new SlashCommandRegistrar();
 

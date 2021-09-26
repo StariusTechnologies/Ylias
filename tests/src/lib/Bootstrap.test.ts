@@ -1,5 +1,5 @@
 import path from 'path';
-import { Bootstrap } from '#root/models/Bootstrap';
+import { Bootstrap } from '#lib/Bootstrap';
 import { config as configureEnvironment } from 'dotenv';
 
 const prodDotEnvPath = path.join(__dirname, '..', '..', '..', 'prod.env');

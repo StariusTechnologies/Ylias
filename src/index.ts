@@ -1,5 +1,5 @@
 import Logger from '@lilywonhalf/pretty-logger';
-import { Bootstrap } from './models/Bootstrap';
+import { Bootstrap } from '#lib/Bootstrap';
 
 Logger.info('Booting up application...');
 

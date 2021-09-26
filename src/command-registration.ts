@@ -1,6 +1,6 @@
 import Logger from '@lilywonhalf/pretty-logger';
-import { Bootstrap } from './models/Bootstrap';
-import { SlashCommandRegistrar } from './models/SlashCommandRegistrar';
+import { Bootstrap } from '#lib/Bootstrap';
+import { SlashCommandRegistrar } from '#lib/SlashCommandRegistrar';
 import path from 'path';
 
 const productionMode = process.argv.some(arg => arg.toLowerCase().includes('prod'));

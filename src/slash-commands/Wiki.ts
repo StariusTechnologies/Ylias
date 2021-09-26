@@ -1,9 +1,9 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
-import { Emotion, Emotions } from '../models/Emotion';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
+import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class WikiCommand extends SlashCommand {
     private static wikipediaLanguages = [

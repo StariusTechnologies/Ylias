@@ -2,7 +2,7 @@ import { CommandInteractionOptionResolver, Constants, CommandInteraction } from 
 import type {
     UserError
 } from '@sapphire/framework';
-import type { SlashCommand, SlashCommandContext } from '../structures/SlashCommand';
+import type { SlashCommand, SlashCommandContext } from '#framework/lib/structures/SlashCommand';
 
 export const Events = {
     // #region Discord.js base events

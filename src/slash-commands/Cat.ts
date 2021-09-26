@@ -1,10 +1,10 @@
 import type { CommandInteraction } from 'discord.js';
 import type { PieceContext } from '@sapphire/pieces';
-import { SlashCommand } from '../models/framework/lib/structures/SlashCommand';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
 import Logger from '@lilywonhalf/pretty-logger';
-import { Emotion, Emotions } from '../models/Emotion';
+import { SlashCommand } from '#framework/lib/structures/SlashCommand';
+import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class CatCommand extends SlashCommand {
     constructor(context: PieceContext) {

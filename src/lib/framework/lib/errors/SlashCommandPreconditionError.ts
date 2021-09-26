@@ -1,5 +1,5 @@
 import { UserError } from '@sapphire/framework';
-import type { SlashCommandPrecondition } from '../structures/SlashCommandPrecondition';
+import type { SlashCommandPrecondition } from '#framework/lib/structures/SlashCommandPrecondition';
 
 export class SlashCommandPreconditionError extends UserError {
     public readonly precondition: SlashCommandPrecondition;

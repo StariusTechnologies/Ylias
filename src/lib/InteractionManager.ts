@@ -8,7 +8,7 @@ import type {
     TextBasedChannels,
     Emoji
 } from 'discord.js';
-import { MINUTE } from '../models/DateTimeUtils';
+import { MINUTE } from './DateTimeUtils';
 
 export interface ButtonCreationData {
     id: string;

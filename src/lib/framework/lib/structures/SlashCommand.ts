@@ -14,7 +14,7 @@ import {
 import {
     SlashCommandPreconditionContainerArray,
     SlashCommandPreconditionEntryResolvable
-} from '../utils/SlashCommandPreconditionContainerArray';
+} from '#framework/lib/utils/SlashCommandPreconditionContainerArray';
 
 export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends AliasPiece {
     public description: string;

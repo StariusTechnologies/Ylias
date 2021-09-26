@@ -1,8 +1,8 @@
 import { Constants, Message, MessageAttachment, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import type { PieceContext } from '@sapphire/pieces';
-import Emojis from '../models/Emojis';
-import { Emotion, Emotions } from '../models/Emotion';
+import Emojis from '#lib/Emojis';
+import { Emotion, Emotions } from '#lib/Emotion';
 
 type GuildTextChannel = TextChannel | ThreadChannel | NewsChannel;
 

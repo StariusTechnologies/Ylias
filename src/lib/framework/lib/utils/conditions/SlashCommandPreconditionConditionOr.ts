@@ -1,5 +1,5 @@
 import { isOk, ok } from '@sapphire/framework';
-import type { SlashCommandPreconditionContainerResult } from '../ISlashCommandPreconditionContainer';
+import type { SlashCommandPreconditionContainerResult } from '#framework/lib/utils/ISlashCommandPreconditionContainer';
 import type { ISlashCommandPreconditionCondition } from './ISlashCommandPreconditionCondition';
 
 export const SlashCommandPreconditionConditionOr: ISlashCommandPreconditionCondition = {
