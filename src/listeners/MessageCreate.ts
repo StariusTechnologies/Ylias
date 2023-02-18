@@ -1,4 +1,4 @@
-import { Constants, Message, MessageAttachment, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
+import { Constants, Message, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { Listener } from '@sapphire/framework';
 import type { PieceContext } from '@sapphire/pieces';
 import Emojis from '#lib/Emojis';
@@ -14,37 +14,20 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
     }
 
     public run(message: Message): void {
-        this.handlePrefixedCommand(message);
+        this.handleBotMention(message);
         this.handleMomMention(message);
     }
 
-    private handlePrefixedCommand(message: Message): void {
-        const commandName = message.content.split(' ')[0].slice(1);
-        const embed = Emotion.getEmotionEmbed(Emotions.WINK).setTitle('Slash commands');
-        const commandsToIgnore = ['ping'];
-        const commandExists = this.container.stores.get('slash-commands').has(commandName);
-
-        if (commandExists) {
-            if (message.content.startsWith('/')) {
-                message.reply({
-                    embeds: [embed.setDescription(`You actually have to click on the slash command when it pops up (you can also use the tab key on desktop) or else it won't work`)],
-                    files: [
-                        new MessageAttachment(
-                            'https://i.discord.fr/UZR.png',
-                            'mobile-click.png'
-                        ),
-                        new MessageAttachment(
-                            'https://i.discord.fr/DGJ.png',
-                            'desktop-click.png'
-                        ),
-                    ],
-                });
-            } else if (!commandsToIgnore.includes(commandName)) {
-                message.reply({
-                    embeds: [embed.setDescription(`I work with slash commands now, try typing \`/${commandName.toLowerCase()}\`!`)],
-                });
-            }
+    private handleBotMention(message: Message): void {
+        if (!message.mentions.users.has(message.client.user!.id)) {
+            return;
         }
+
+        const embed = Emotion.getEmotionEmbed(Emotions.NEUTRAL).setTitle('Pinged');
+
+        message.reply({
+            embeds: [embed.setDescription(`Hello there! It's me, a bot! If you want me to do something for you, you must use my slash commands! Type a slash (/) in the message bar to get a list of them!`)],
+        });
     }
 
     private handleMomMention(message: Message): void {
@@ -60,7 +43,6 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
         const searchWords = [
             mom.id,
             mom.username,
-            mom.discriminator,
             'leel',
             'lil',
             'lyl',
