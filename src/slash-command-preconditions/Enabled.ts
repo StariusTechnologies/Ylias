@@ -1,16 +1,16 @@
-import type { PieceContext } from '@sapphire/pieces';
-import type { CommandInteraction } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
+import type { ChatInputCommandInteraction } from 'discord.js';
 import { Identifiers } from '#framework/lib/errors/Identifiers';
 import type { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { SlashCommandPrecondition } from '#framework/lib/structures/SlashCommandPrecondition';
 
 export class EnabledPrecondition extends SlashCommandPrecondition {
-    public constructor(context: PieceContext) {
+    public constructor(context: Piece.LoaderContext) {
         super(context, { position: 10 });
     }
 
     public run(
-        _: CommandInteraction,
+        _: ChatInputCommandInteraction,
         command: SlashCommand,
         context: SlashCommandPrecondition.Context
     ): SlashCommandPrecondition.Result {

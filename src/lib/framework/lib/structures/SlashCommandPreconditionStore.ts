@@ -19,7 +19,7 @@ export class SlashCommandPreconditionStore extends Store<SlashCommandPreconditio
         for (const precondition of this.globalPreconditions) {
             const result = await precondition.run(interaction, slashCommand, context);
 
-            if (!result.success) {
+            if (result.isErr()) {
                 return result;
             }
         }

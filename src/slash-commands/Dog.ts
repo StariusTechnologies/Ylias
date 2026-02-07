@@ -1,5 +1,5 @@
-import type { CommandInteraction } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
@@ -7,7 +7,7 @@ import { Emotion, Emotions } from '#lib/Emotion';
 import Logger from '@lilywonhalf/pretty-logger';
 
 export default class DogCommand extends SlashCommand {
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             description: 'Displays a random dog.',
             preconditions: [{
@@ -20,7 +20,7 @@ export default class DogCommand extends SlashCommand {
         });
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const response = await fetch('https://random.dog/woof', FetchResultTypes.Text).catch(error => {
             Logger.notice(error);
         }) as any;

@@ -1,12 +1,11 @@
 import Logger from '@lilywonhalf/pretty-logger';
-import { Client, Constants } from 'discord.js';
+import { Client, Events } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import type { PieceContext } from '@sapphire/pieces';
 
-export default class Ready extends Listener<typeof Constants.Events.CLIENT_READY> {
-    constructor(context: PieceContext) {
+export default class Ready extends Listener<typeof Events.ClientReady> {
+    constructor(context: Listener.LoaderContext) {
         super(context, {
-            event: Constants.Events.CLIENT_READY,
+            event: Events.ClientReady,
         });
     }
 

@@ -1,10 +1,6 @@
 import { join } from 'path';
-import { Client, Intents } from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 import {
-    ArgumentStore,
-    CommandStore,
-    ListenerStore,
-    PreconditionStore,
     SapphireClient
 } from '@sapphire/framework';
 import { config as configureEnvironment } from 'dotenv';
@@ -13,11 +9,7 @@ import { SlashCommandPreconditionStore } from '#framework/lib/structures/SlashCo
 
 declare module '@sapphire/pieces' {
     interface StoreRegistryEntries {
-        arguments: ArgumentStore;
-        commands: CommandStore;
         'slash-commands': SlashCommandStore;
-        listeners: ListenerStore;
-        preconditions: PreconditionStore;
         'slash-command-preconditions': SlashCommandPreconditionStore;
     }
 }
@@ -48,19 +40,20 @@ export class Bootstrap {
 
     public initializeIntents(): void {
         this.intents = [
-            Intents.FLAGS.GUILDS,
-            Intents.FLAGS.GUILD_MEMBERS,
-            Intents.FLAGS.GUILD_BANS,
-            Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-            Intents.FLAGS.GUILD_INTEGRATIONS, // TODO check if necessary
-            Intents.FLAGS.GUILD_WEBHOOKS, // TODO check if necessary
-            Intents.FLAGS.GUILD_INVITES,
-            Intents.FLAGS.GUILD_VOICE_STATES,
-            Intents.FLAGS.GUILD_PRESENCES,
-            Intents.FLAGS.GUILD_MESSAGES,
-            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-            Intents.FLAGS.DIRECT_MESSAGES,
-            Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMembers,
+            GatewayIntentBits.GuildModeration,
+            GatewayIntentBits.GuildEmojisAndStickers,
+            GatewayIntentBits.GuildIntegrations, // TODO check if necessary
+            GatewayIntentBits.GuildWebhooks, // TODO check if necessary
+            GatewayIntentBits.GuildInvites,
+            GatewayIntentBits.GuildVoiceStates,
+            GatewayIntentBits.GuildPresences,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildMessageReactions,
+            GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.DirectMessageReactions,
+            GatewayIntentBits.MessageContent,
         ];
     }
 

@@ -1,24 +1,24 @@
-import type { CommandInteraction } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class DecideCommand extends SlashCommand {
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             description: 'Multiple options, you need to make a choice, and you just can\'t make your mind? Let me help :D !',
             arguments: Array(10).fill({}).map((_: any, index) => {
                 return {
                     name: `choice${index + 1}`,
                     description: 'One of the options',
-                    type: 'STRING',
+                    type: ApplicationCommandOptionType.String,
                     required: index < 2,
                 }
             }),
         });
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const choices = interaction.options.data.filter(option => option.value).map(option => option.value);
         const choice = choices[Math.floor(Math.random() * choices.length)];
         const deliverySentences = [

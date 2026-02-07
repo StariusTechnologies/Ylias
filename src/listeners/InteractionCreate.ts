@@ -1,28 +1,27 @@
-import { Interaction, CommandInteraction, ButtonInteraction, Constants } from 'discord.js';
+import { Interaction, ChatInputCommandInteraction, CommandInteractionOptionResolver, ButtonInteraction, Events as DjsEvents } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import type { PieceContext } from '@sapphire/pieces';
 import { Events } from '#lib/framework/lib/types/Events';
 import { InteractionManager } from '#lib/InteractionManager';
 
-export default class InteractionCreate extends Listener<typeof Constants.Events.INTERACTION_CREATE> {
+export default class InteractionCreate extends Listener<typeof DjsEvents.InteractionCreate> {
     private interactionManager: InteractionManager = new InteractionManager();
 
-    constructor(context: PieceContext) {
+    constructor(context: Listener.LoaderContext) {
         super(context, {
-            event: Constants.Events.INTERACTION_CREATE,
+            event: DjsEvents.InteractionCreate,
         });
     }
 
     public run(interaction: Interaction): void {
-        if (interaction.isCommand()) {
+        if (interaction.isChatInputCommand()) {
             this.commandInteractionHandler(interaction);
         } else if (interaction.isButton()) {
             this.buttonInteractionHandler(interaction);
         }
     }
 
-    private async commandInteractionHandler(interaction: CommandInteraction): Promise<void> {
-        const args = interaction.options;
+    private async commandInteractionHandler(interaction: ChatInputCommandInteraction): Promise<void> {
+        const args = interaction.options as any;
         const { commandName } = interaction;
         const command = this.container.stores.get('slash-commands').get(commandName);
 
@@ -36,7 +35,7 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
         }
 
         const context = { commandName };
-        const payload = { interaction, command, parameters: interaction.options, context: { commandName } };
+        const payload = { interaction, command, parameters: interaction.options as CommandInteractionOptionResolver, context: { commandName } };
 
         // Run global preconditions:
         const globalResult = await this.container.stores.get('slash-command-preconditions').run(
@@ -45,8 +44,8 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
             context
         );
 
-        if (!globalResult.success) {
-            interaction.client.emit(Events.SlashCommandDenied, globalResult.error, payload);
+        if (globalResult.isErr()) {
+            interaction.client.emit(Events.SlashCommandDenied, globalResult.unwrapErr(), payload);
 
             return;
         }
@@ -54,8 +53,8 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
         // Run command-specific preconditions:
         const localResult = await command.preconditions.run(interaction, command, context);
 
-        if (!localResult.success) {
-            interaction.client.emit(Events.SlashCommandDenied, localResult.error, payload);
+        if (localResult.isErr()) {
+            interaction.client.emit(Events.SlashCommandDenied, localResult.unwrapErr(), payload);
 
             return;
         }
@@ -66,8 +65,8 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
             const result = await command.run(interaction, args, context);
 
             interaction.client.emit(Events.SlashCommandSuccess, { ...payload, args, result });
-        } catch (error) {
-            interaction.client.emit(Events.SlashCommandError, error, { ...payload, args, piece: command });
+        } catch (error: unknown) {
+            interaction.client.emit(Events.SlashCommandError, error as Error, { ...payload, args, piece: command });
         } finally {
             interaction.client.emit(Events.SlashCommandFinish, interaction, command, { ...payload, args });
         }
@@ -77,8 +76,8 @@ export default class InteractionCreate extends Listener<typeof Constants.Events.
         if (this.interactionManager.hasListeners(interaction.customId)) {
             try {
                 this.interactionManager.emit(interaction.customId, interaction);
-            } catch (error) {
-                interaction.client.emit(Events.ButtonError, error, interaction);
+            } catch (error: unknown) {
+                interaction.client.emit(Events.ButtonError, error as Error, interaction);
             }
         } else {
             this.interactionManager.handleUnboundButton(interaction);

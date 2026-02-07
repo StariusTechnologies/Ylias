@@ -1,4 +1,4 @@
-import type { CommandInteraction, TextBasedChannels } from 'discord.js';
+import { ChannelType, type ChatInputCommandInteraction } from 'discord.js';
 import { Identifiers } from '#framework/lib/errors/Identifiers';
 import {
     SlashCommandPrecondition,
@@ -6,9 +6,9 @@ import {
 } from '#framework/lib/structures/SlashCommandPrecondition';
 
 export class GuildNewsOnlyPrecondition extends SlashCommandPrecondition {
-    private readonly allowedTypes: TextBasedChannels['type'][] = ['GUILD_NEWS', 'GUILD_NEWS_THREAD'];
+    private readonly allowedTypes = [ChannelType.GuildAnnouncement, ChannelType.AnnouncementThread];
 
-    public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
+    public run(interaction: ChatInputCommandInteraction): SlashCommandPreconditionResult {
         return interaction.channel && this.allowedTypes.includes(interaction.channel.type)
             ? this.ok()
             : this.error({

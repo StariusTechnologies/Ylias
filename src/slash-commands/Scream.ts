@@ -1,5 +1,5 @@
-import type { CommandInteraction } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '#lib/Emotion';
 
@@ -27,19 +27,19 @@ export default class PingCommand extends SlashCommand {
         { scream: 'spaghetti', renderedScream: 'SPAGHETTI%%', multipliedLetter: 'I', emoji: ':spaghetti:' },
     ];
 
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             description: 'You can make me scream something!',
             arguments: [{
                 name: 'scream',
                 description: 'Write something you want me to scream.',
-                type: 'STRING',
+                type: ApplicationCommandOptionType.String,
                 required: true,
             }],
         });
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const scream = interaction.options.getString('scream', true);
         let renderedScream;
         let multipliedLetter;

@@ -1,5 +1,5 @@
-import { CommandInteraction, MessageEmbed } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import { ChatInputCommandInteraction, EmbedBuilder, ApplicationCommandOptionType } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
 import { SlashCommand } from '#framework/lib/structures/SlashCommand';
@@ -28,20 +28,20 @@ export default class WikiCommand extends SlashCommand {
         'tum', 'ki', 'sg', 'chy', 'pfl', 'srn', 'atj', 'gcr', 'awa', 'nostalgia',
     ];
 
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             description: 'I can look up an article on Wikipedia and write the beginning here if you want.',
             arguments: [
                 {
                     name: 'language',
                     description: 'Wikipedia language code (the subdomain for the language)',
-                    type: 'STRING',
+                    type: ApplicationCommandOptionType.String,
                     required: true,
                 },
                 {
                     name: 'search',
                     description: 'What you are looking for',
-                    type: 'STRING',
+                    type: ApplicationCommandOptionType.String,
                     required: true,
                 },
             ],
@@ -62,7 +62,7 @@ export default class WikiCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const languagePrefix = interaction.options.getString('language');
         const search = interaction.options.getString('search', true);
         const host = 'https://' + languagePrefix + '.wikipedia.org';
@@ -98,7 +98,7 @@ export default class WikiCommand extends SlashCommand {
 
         const { title, extract } = data[firstPageId];
         const urlWiki = `${host}/wiki/${encodeURIComponent(title)}`;
-        const embed = new MessageEmbed().setTitle(title).setURL(urlWiki).setDescription(
+        const embed = new EmbedBuilder().setTitle(title).setURL(urlWiki).setDescription(
             extract.slice(0, 1000) + (extract.length > 1000 ? '...' : '')
         ).setColor(0xE88745);
 

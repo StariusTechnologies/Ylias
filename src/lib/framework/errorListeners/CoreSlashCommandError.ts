@@ -1,15 +1,14 @@
-import type { PieceContext } from '@sapphire/pieces';
 import { Listener } from '@sapphire/framework';
 import { SlashCommandErrorPayload, Events } from '#framework/lib/types/Events';
 
 export class CoreEvent extends Listener<typeof Events.SlashCommandError> {
-    public constructor(context: PieceContext) {
+    public constructor(context: Listener.LoaderContext) {
         super(context, { event: Events.SlashCommandError });
     }
 
     public run(error: Error, context: SlashCommandErrorPayload): void {
-        const { name, path } = context.piece;
+        const { name, location } = context.piece;
 
-        this.container.logger.error(`Encountered error on slash command "${name}" at path "${path}"`, error);
+        this.container.logger.error(`Encountered error on slash command "${name}" at path "${location.full}"`, error);
     }
 }

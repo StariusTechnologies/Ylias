@@ -1,9 +1,8 @@
 import Logger from '@lilywonhalf/pretty-logger';
 import type { Guild } from 'discord.js';
 import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
-import type { Snowflake } from 'discord-api-types/globals';
-import type { APIApplicationCommandOption } from 'discord-api-types/payloads/v8/_interactions/slashCommands';
+import { Routes } from 'discord-api-types/v10';
+import type { Snowflake, APIApplicationCommandOption } from 'discord-api-types/v10';
 import type { SapphireClient } from '@sapphire/framework';
 import type { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import type SlashCommandStore from '#framework/lib/structures/SlashCommandStore';
@@ -29,19 +28,6 @@ interface APIApplicationCommand {
     default_permission?: boolean;
 }
 
-const ApplicationCommandOptionTypeMap: { [key: string]: number } = {
-    SUBCOMMAND: 1,
-    SUBCOMMANDGROUP: 2,
-    STRING: 3,
-    INTEGER: 4,
-    BOOLEAN: 5,
-    USER: 6,
-    CHANNEL: 7,
-    ROLE: 8,
-    MENTIONABLE: 9,
-    NUMBER: 10,
-}
-
 export class SlashCommandRegistrar {
     private static instance: SlashCommandRegistrar;
 
@@ -56,7 +42,7 @@ export class SlashCommandRegistrar {
             return SlashCommandRegistrar.instance;
         }
 
-        this.rest = new REST({ version: '9' }).setToken(process.env.TOKEN as string);
+        this.rest = new REST({ version: '10' }).setToken(process.env.TOKEN as string);
 
         SlashCommandRegistrar.instance = this;
     }
@@ -89,23 +75,10 @@ export class SlashCommandRegistrar {
 
         Logger.info('Started refreshing application slash commands for test guild.');
 
-        const resultCommands = await this.rest.put(
+        await this.rest.put(
             Routes.applicationGuildCommands(this.client.id!, testGuild.id),
             { body: slashCommandData }
         ) as APIGuildApplicationCommand[];
-
-        const commandsWithPermissions = resultCommands.flat().filter((command: APIGuildApplicationCommand) => {
-            return this.slashCommandStore.get(command.name)!.permissions?.length > 0;
-        });
-
-        const fullPermissions = commandsWithPermissions.map((command: APIGuildApplicationCommand) => {
-            return {
-                id: command.id,
-                permissions: this.slashCommandStore.get(command.name)!.permissions,
-            };
-        });
-
-        await testGuild.commands.permissions.set({ fullPermissions });
 
         Logger.info('Successfully reloaded application slash commands for test guild.');
     }
@@ -134,23 +107,10 @@ export class SlashCommandRegistrar {
     private async guildRegister(guild: Guild): Promise<void> {
         await guild.commands.fetch();
 
-        const commandsResult = await this.rest.put(
+        await this.rest.put(
             Routes.applicationGuildCommands(this.client.id!, guild.id),
             { body: this.guildSlashCommandData }
         ) as APIGuildApplicationCommand[];
-
-        const commandsWithPermissions = commandsResult.filter((command: APIGuildApplicationCommand) => {
-            return this.slashCommandStore.get(command.name)!.permissions?.length > 0;
-        });
-
-        const fullPermissions = commandsWithPermissions.map((command: APIGuildApplicationCommand) => {
-            return {
-                id: command.id,
-                permissions: this.slashCommandStore.get(command.name)!.permissions,
-            };
-        });
-
-        await guild.commands.permissions.set({ fullPermissions });
     }
 
     private slashCommandToSlashCommandData(slashCommand: SlashCommand): APIApplicationCommand {
@@ -159,12 +119,7 @@ export class SlashCommandRegistrar {
             guild_id: undefined,
             name: slashCommand.name,
             description: slashCommand.description,
-            options: slashCommand.arguments.map(argument => {
-                return {
-                    ...argument,
-                    type: ApplicationCommandOptionTypeMap[argument.type.toString()],
-                }
-            }),
+            options: slashCommand.arguments as unknown as APIApplicationCommandOption[],
             default_permission: slashCommand.defaultPermission,
         };
     }

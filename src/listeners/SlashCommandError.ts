@@ -1,11 +1,10 @@
 import Logger from '@lilywonhalf/pretty-logger';
 import { Listener, UserError } from '@sapphire/framework';
-import type { PieceContext } from '@sapphire/pieces';
 import { Events, SlashCommandErrorPayload } from '#lib/framework/lib/types/Events';
 import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class SlashCommandError extends Listener<typeof Events.SlashCommandError> {
-    constructor(context: PieceContext) {
+    constructor(context: Listener.LoaderContext) {
         super(context, {
             event: Events.SlashCommandError,
         });
@@ -27,7 +26,7 @@ export default class SlashCommandError extends Listener<typeof Events.SlashComma
                     tag: payload.interaction.user.tag,
                 },
                 name: payload.interaction.commandName,
-                options: payload.interaction.options.data,
+                options: (payload.interaction as any).options?.data,
             });
         }
 

@@ -1,5 +1,5 @@
-import type { CommandInteraction } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
 import Logger from '@lilywonhalf/pretty-logger';
@@ -9,13 +9,13 @@ import { Emotion, Emotions } from '#lib/Emotion';
 export default class YouTubeCommand extends SlashCommand {
     private static readonly YOUTUBE_VIDEO_KIND = 'youtube#video';
 
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             description: 'Allows you to search a video on YouTube.',
             arguments: [{
                 name: 'query',
                 description: 'The search query',
-                type: 'STRING',
+                type: ApplicationCommandOptionType.String,
                 required: true,
             }],
             preconditions: [{
@@ -28,7 +28,7 @@ export default class YouTubeCommand extends SlashCommand {
         });
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const videoURL = 'https://www.youtube.com/watch?v=';
         const apiBaseURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50`;
         const query = encodeURIComponent(interaction.options.getString('query', true));

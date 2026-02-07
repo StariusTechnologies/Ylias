@@ -1,15 +1,14 @@
-import { Constants, Message, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
+import { Events, Message, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import type { PieceContext } from '@sapphire/pieces';
 import Emojis from '#lib/Emojis';
 import { Emotion, Emotions } from '#lib/Emotion';
 
 type GuildTextChannel = TextChannel | ThreadChannel | NewsChannel;
 
-export default class MessageCreate extends Listener<typeof Constants.Events.MESSAGE_CREATE> {
-    constructor(context: PieceContext) {
+export default class MessageCreate extends Listener<typeof Events.MessageCreate> {
+    constructor(context: Listener.LoaderContext) {
         super(context, {
-            event: Constants.Events.MESSAGE_CREATE,
+            event: Events.MessageCreate,
         });
     }
 
@@ -74,9 +73,9 @@ export default class MessageCreate extends Listener<typeof Constants.Events.MESS
             const channel = message.channel as GuildTextChannel;
             const embed = Emotion.getEmotionEmbed(Emotions.WINK)
                 .setURL(message.url)
-                .setAuthor(message.member!.displayName, message.author.displayAvatarURL({ dynamic: true }), message.url)
+                .setAuthor({ name: message.member!.displayName, iconURL: message.author.displayAvatarURL(), url: message.url })
                 .setDescription(message.content)
-                .setFooter(`#${channel.name} in ${message.guild.name}`);
+                .setFooter({ text: `#${channel.name} in ${message.guild.name}` });
 
             mom.send({ embeds: [embed] });
         }

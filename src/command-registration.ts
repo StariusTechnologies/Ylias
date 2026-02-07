@@ -31,7 +31,7 @@ bootstrap.initializeClient();
         }
 
         process.exit();
-    } catch (error) {
+    } catch (error: any) {
         Logger.error(error);
         process.exit(1);
     }

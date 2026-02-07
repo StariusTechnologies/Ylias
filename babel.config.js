@@ -17,7 +17,7 @@ module.exports = {
                 legacy: true,
             },
         ],
-        '@babel/plugin-proposal-class-properties',
+        '@babel/plugin-transform-class-properties',
         'const-enum',
     ],
 };

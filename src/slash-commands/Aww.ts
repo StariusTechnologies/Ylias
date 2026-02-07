@@ -1,17 +1,17 @@
-import type { CommandInteraction } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
 import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 
 export default class AwwCommand extends SlashCommand {
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             description: 'Sends a link to something cute.',
             arguments: [{
                 name: 'hot',
                 description: 'Fetch a post from the hot posts',
-                type: 'BOOLEAN',
+                type: ApplicationCommandOptionType.Boolean,
                 required: false,
             }],
             preconditions: [{
@@ -24,7 +24,7 @@ export default class AwwCommand extends SlashCommand {
         });
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const isHot = interaction.options.getBoolean('hot') as boolean;
         const url = `https://www.reddit.com/r/aww/${isHot ? '' : 'new'}.json?count=100`;
         const response = await fetch(url) as any;

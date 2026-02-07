@@ -1,4 +1,4 @@
-import { isOk, ok } from '@sapphire/framework';
+import { ok } from '@sapphire/framework';
 import type { SlashCommandPreconditionContainerResult } from '#framework/lib/utils/ISlashCommandPreconditionContainer';
 import type { ISlashCommandPreconditionCondition } from './ISlashCommandPreconditionCondition';
 
@@ -9,7 +9,7 @@ export const SlashCommandPreconditionConditionOr: ISlashCommandPreconditionCondi
         for (const child of entries) {
             const result = await child.run(interaction, command, context);
 
-            if (isOk(result)) {
+            if (result.isOk()) {
                 return result;
             }
 
@@ -24,7 +24,7 @@ export const SlashCommandPreconditionConditionOr: ISlashCommandPreconditionCondi
         let error: SlashCommandPreconditionContainerResult | null = null;
 
         for (const result of results) {
-            if (isOk(result)) {
+            if (result.isOk()) {
                 return result;
             }
 

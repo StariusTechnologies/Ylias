@@ -1,11 +1,11 @@
-import type { CommandInteraction } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { SlashCommandArgumentFormats } from '../slash-command-preconditions/ArgumentFormat';
 import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class SetAvatarCommand extends SlashCommand {
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             name: 'setavatar',
             description: 'Allows you to change my avatar.',
@@ -13,7 +13,7 @@ export default class SetAvatarCommand extends SlashCommand {
             arguments: [{
                 name: 'url',
                 description: 'The URL of the avatar you would like me to change to.',
-                type: 'STRING',
+                type: ApplicationCommandOptionType.String,
                 required: true,
             }],
             preconditions: [{
@@ -34,7 +34,7 @@ export default class SetAvatarCommand extends SlashCommand {
         });
     }
 
-    async run(interaction: CommandInteraction): Promise<void> {
+    async run(interaction: ChatInputCommandInteraction): Promise<void> {
         interaction.client.user!.setAvatar(interaction.options.getString('url', true)).then(() => {
             const embed = Emotion.getEmotionEmbed(Emotions.NEUTRAL)
                 .setTitle('I look great!')

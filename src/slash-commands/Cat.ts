@@ -1,5 +1,5 @@
-import type { CommandInteraction } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { fetch } from '@sapphire/fetch';
 import { BucketScope } from '@sapphire/framework';
 import Logger from '@lilywonhalf/pretty-logger';
@@ -7,7 +7,7 @@ import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class CatCommand extends SlashCommand {
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             description: 'Displays a random cat.',
             preconditions: [{
@@ -20,7 +20,7 @@ export default class CatCommand extends SlashCommand {
         });
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const response = await fetch('https://aws.random.cat/meow').catch(error => {
             Logger.notice(error);
         }) as any;

@@ -1,4 +1,4 @@
-import type { CommandInteraction, ApplicationCommandOptionType } from 'discord.js';
+import { ApplicationCommandOptionType, type ChatInputCommandInteraction } from 'discord.js';
 import type { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import {
     SlashCommandPrecondition,
@@ -28,7 +28,7 @@ declare module '../lib/framework/lib/structures/SlashCommandPrecondition' {
 
 export class ArgumentFormatPrecondition extends SlashCommandPrecondition {
     public run(
-        interaction: CommandInteraction,
+        interaction: ChatInputCommandInteraction,
         _: SlashCommand,
         context: SlashCommandArgumentFormatContext
     ): SlashCommandPreconditionResult {
@@ -37,7 +37,7 @@ export class ArgumentFormatPrecondition extends SlashCommandPrecondition {
             return this.ok();
         }
 
-        const acceptedTypes: ApplicationCommandOptionType[] = ['STRING', 'NUMBER', 'INTEGER'];
+        const acceptedTypes: ApplicationCommandOptionType[] = [ApplicationCommandOptionType.String, ApplicationCommandOptionType.Number, ApplicationCommandOptionType.Integer];
 
         for (const formatData of context.formats) {
             const hasArgument = interaction.options.get(formatData.name);

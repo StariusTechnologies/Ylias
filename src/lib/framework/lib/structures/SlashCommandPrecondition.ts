@@ -1,5 +1,4 @@
-import { Piece, PieceContext, PieceOptions } from '@sapphire/pieces';
-import type { Awaited } from '@sapphire/utilities';
+import { Piece } from '@sapphire/pieces';
 import { BucketScope, err, ok, Result, UserError } from '@sapphire/framework';
 import type { CommandInteraction } from 'discord.js';
 import type { SlashCommand } from './SlashCommand';
@@ -11,7 +10,7 @@ export type AsyncSlashCommandPreconditionResult = Promise<Result<unknown, UserEr
 export abstract class SlashCommandPrecondition extends Piece {
     public readonly position: number | null;
 
-    public constructor(context: PieceContext, options: SlashCommandPrecondition.Options = {}) {
+    public constructor(context: Piece.LoaderContext, options: SlashCommandPrecondition.Options = {}) {
         super(context, options);
         this.position = options.position ?? null;
     }
@@ -101,7 +100,7 @@ export type SimpleSlashCommandPreconditionKeys = {
     [K in SlashCommandPreconditionKeys]: SlashCommandPreconditions[K] extends never ? K : never;
 }[SlashCommandPreconditionKeys];
 
-export interface SlashCommandPreconditionOptions extends PieceOptions {
+export interface SlashCommandPreconditionOptions extends Piece.Options {
     /**
      * The position for the precondition to be set at in the global precondition list. If set to `null`, this
      * precondition will not be set as a global one.

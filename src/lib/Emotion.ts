@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 export enum Emotions {
     NEUTRAL = 'https://cdn.nostradamus.dev/ylias/emotions/neutral.gif',
@@ -11,11 +11,11 @@ export enum Emotions {
 export class Emotion {
     private static DEFAULT_EMBED_COLOUR = 0xE88745;
 
-    public static getEmotionEmbed(emotion: Emotions): MessageEmbed {
-        return Emotion.addEmotionToEmbed(new MessageEmbed().setColor(Emotion.DEFAULT_EMBED_COLOUR), emotion);
+    public static getEmotionEmbed(emotion: Emotions): EmbedBuilder {
+        return Emotion.addEmotionToEmbed(new EmbedBuilder().setColor(Emotion.DEFAULT_EMBED_COLOUR), emotion);
     }
 
-    public static addEmotionToEmbed(embed: MessageEmbed, emotion: Emotions): MessageEmbed {
+    public static addEmotionToEmbed(embed: EmbedBuilder, emotion: Emotions): EmbedBuilder {
         return embed.setThumbnail(emotion);
     }
 }

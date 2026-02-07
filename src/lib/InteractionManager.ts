@@ -1,30 +1,29 @@
-import { Message, MessageButton, Collection, TextChannel } from 'discord.js';
+import { Message, ButtonBuilder, Collection, TextChannel, ButtonStyle } from 'discord.js';
 import { EventEmitter } from 'stream';
-import type { APIPartialEmoji, APIMessage } from 'discord-api-types';
+import type { APIPartialEmoji, APIMessage } from 'discord-api-types/v10';
 import type {
     MessageEditOptions,
-    MessageButtonStyle,
     ButtonInteraction,
-    TextBasedChannels,
+    TextBasedChannel,
     Emoji
 } from 'discord.js';
 import { MINUTE } from './DateTimeUtils';
 
 export interface ButtonCreationData {
     id: string;
-    style?: MessageButtonStyle;
+    style?: ButtonStyle;
     label?: string;
     emoji?: string | Emoji | APIPartialEmoji;
     callback?: (interaction: ButtonInteraction) => void;
     timeout?: number;
-    channel: TextBasedChannels;
+    channel: TextBasedChannel;
 }
 
 export class InteractionManager extends EventEmitter{
     private static readonly NO_BUTTON_TIMEOUT = 0;
     private static readonly DEFAULT_BUTTON_TIMEOUT = 20 * MINUTE;
 
-    private static buttons: Collection<string, MessageButton> = new Collection();
+    private static buttons: Collection<string, ButtonBuilder> = new Collection();
     private static instance: InteractionManager;
 
     constructor() {
@@ -43,10 +42,10 @@ export class InteractionManager extends EventEmitter{
 
     public getButton(
         { id, style, label, emoji, callback, timeout, channel }: ButtonCreationData
-    ): MessageButton {
+    ): ButtonBuilder {
         const button: any = InteractionManager.buttons.has(id)
             ? InteractionManager.buttons.get(id)
-            : new MessageButton().setCustomId(id);
+            : new ButtonBuilder().setCustomId(id);
 
         if (style) {
             button.setStyle(style);
@@ -71,7 +70,9 @@ export class InteractionManager extends EventEmitter{
             setTimeout(async () => {
                 const message = await channel.messages.cache.find(message => {
                     return message.components.some(
-                        row => row.components.some(component => component.customId === id)
+                        row => 'components' in row && row.components.some(
+                            (component: any) => component.customId === id
+                        )
                     );
                 });
 
@@ -119,8 +120,8 @@ export class InteractionManager extends EventEmitter{
         const interactionMessage = interaction.message;
         let message: Message = interactionMessage as Message;
 
-        if ((interactionMessage as APIMessage).channel_id) {
-            const apiMessage: APIMessage = interactionMessage as APIMessage;
+        if ((interactionMessage as unknown as APIMessage).channel_id) {
+            const apiMessage = interactionMessage as unknown as APIMessage;
             const channelId = apiMessage.channel_id;
             const channel: TextChannel = await interaction.client.channels.fetch(channelId) as TextChannel;
 

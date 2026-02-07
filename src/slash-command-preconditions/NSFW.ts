@@ -1,4 +1,4 @@
-import type { CommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 import { Identifiers } from '#framework/lib/errors/Identifiers';
 import {
     SlashCommandPrecondition,
@@ -6,7 +6,7 @@ import {
 } from '#framework/lib/structures/SlashCommandPrecondition';
 
 export class NSFWPrecondition extends SlashCommandPrecondition {
-    public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
+    public run(interaction: ChatInputCommandInteraction): SlashCommandPreconditionResult {
         // `nsfw` is undefined in DMChannel, writing `=== true` will result in it returning`false`.
         return interaction.channel && Reflect.get(interaction.channel, 'nsfw') === true
             ? this.ok()

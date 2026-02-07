@@ -1,4 +1,4 @@
-import { isErr, ok } from '@sapphire/framework';
+import { ok } from '@sapphire/framework';
 import type { ISlashCommandPreconditionCondition } from './ISlashCommandPreconditionCondition';
 
 export const SlashCommandPreconditionConditionAnd: ISlashCommandPreconditionCondition = {
@@ -6,7 +6,7 @@ export const SlashCommandPreconditionConditionAnd: ISlashCommandPreconditionCond
         for (const child of entries) {
             const result = await child.run(interaction, command, context);
 
-            if (isErr(result)) {
+            if (result.isErr()) {
                 return result;
             }
         }
@@ -18,6 +18,6 @@ export const SlashCommandPreconditionConditionAnd: ISlashCommandPreconditionCond
 
         // This is simplified compared to PreconditionContainerAny because we're looking for the first error.
         // However, the base implementation short-circuits with the first Ok.
-        return results.find(isErr) ?? ok();
+        return results.find(r => r.isErr()) ?? ok();
     },
 };

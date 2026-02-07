@@ -1,59 +1,54 @@
-import { CommandInteractionOptionResolver, Constants, CommandInteraction } from 'discord.js';
-import type {
-    UserError
-} from '@sapphire/framework';
+import { CommandInteractionOptionResolver, Events as DjsEvents, CommandInteraction } from 'discord.js';
+import type { UserError } from '@sapphire/framework';
 import type { SlashCommand, SlashCommandContext } from '#framework/lib/structures/SlashCommand';
 
 export const Events = {
     // #region Discord.js base events
-    ChannelCreate: Constants.Events.CHANNEL_CREATE,
-    ChannelDelete: Constants.Events.CHANNEL_DELETE,
-    ChannelPinsUpdate: Constants.Events.CHANNEL_PINS_UPDATE,
-    ChannelUpdate: Constants.Events.CHANNEL_UPDATE,
-    ClientReady: Constants.Events.CLIENT_READY,
-    Debug: Constants.Events.DEBUG,
-    Error: Constants.Events.ERROR,
-    GuildBanAdd: Constants.Events.GUILD_BAN_ADD,
-    GuildBanRemove: Constants.Events.GUILD_BAN_REMOVE,
-    GuildCreate: Constants.Events.GUILD_CREATE,
-    GuildDelete: Constants.Events.GUILD_DELETE,
-    GuildEmojiCreate: Constants.Events.GUILD_EMOJI_CREATE,
-    GuildEmojiDelete: Constants.Events.GUILD_EMOJI_DELETE,
-    GuildEmojiUpdate: Constants.Events.GUILD_EMOJI_UPDATE,
-    GuildIntegrationsUpdate: Constants.Events.GUILD_INTEGRATIONS_UPDATE,
-    GuildMemberAdd: Constants.Events.GUILD_MEMBER_ADD,
-    GuildMemberAvailable: Constants.Events.GUILD_MEMBER_AVAILABLE,
-    GuildMemberRemove: Constants.Events.GUILD_MEMBER_REMOVE,
-    GuildMemberUpdate: Constants.Events.GUILD_MEMBER_UPDATE,
-    GuildMembersChunk: Constants.Events.GUILD_MEMBERS_CHUNK,
-    GuildRoleCreate: Constants.Events.GUILD_ROLE_CREATE,
-    GuildRoleDelete: Constants.Events.GUILD_ROLE_DELETE,
-    GuildRoleUpdate: Constants.Events.GUILD_ROLE_UPDATE,
-    GuildUnavailable: Constants.Events.GUILD_UNAVAILABLE,
-    GuildUpdate: Constants.Events.GUILD_UPDATE,
-    Invalidated: Constants.Events.INVALIDATED,
-    InviteCreate: Constants.Events.INVITE_CREATE,
-    InviteDelete: Constants.Events.INVITE_DELETE,
-    MessageBulkDelete: Constants.Events.MESSAGE_BULK_DELETE,
-    MessageCreate: Constants.Events.MESSAGE_CREATE,
-    MessageDelete: Constants.Events.MESSAGE_DELETE,
-    MessageReactionAdd: Constants.Events.MESSAGE_REACTION_ADD,
-    MessageReactionRemoveAll: Constants.Events.MESSAGE_REACTION_REMOVE_ALL,
-    MessageReactionRemove: Constants.Events.MESSAGE_REACTION_REMOVE,
-    MessageUpdate: Constants.Events.MESSAGE_UPDATE,
-    PresenceUpdate: Constants.Events.PRESENCE_UPDATE,
-    RateLimit: Constants.Events.RATE_LIMIT,
-    Raw: Constants.Events.RAW,
-    ShardDisconnect: Constants.Events.SHARD_DISCONNECT,
-    ShardError: Constants.Events.SHARD_ERROR,
-    ShardReady: Constants.Events.SHARD_READY,
-    ShardReconnecting: Constants.Events.SHARD_RECONNECTING,
-    ShardResume: Constants.Events.SHARD_RESUME,
-    TypingStart: Constants.Events.TYPING_START,
-    UserUpdate: Constants.Events.USER_UPDATE,
-    VoiceStateUpdate: Constants.Events.VOICE_STATE_UPDATE,
-    Warn: Constants.Events.WARN,
-    WebhooksUpdate: Constants.Events.WEBHOOKS_UPDATE,
+    ChannelCreate: DjsEvents.ChannelCreate,
+    ChannelDelete: DjsEvents.ChannelDelete,
+    ChannelPinsUpdate: DjsEvents.ChannelPinsUpdate,
+    ChannelUpdate: DjsEvents.ChannelUpdate,
+    ClientReady: DjsEvents.ClientReady,
+    Debug: DjsEvents.Debug,
+    Error: DjsEvents.Error,
+    GuildBanAdd: DjsEvents.GuildBanAdd,
+    GuildBanRemove: DjsEvents.GuildBanRemove,
+    GuildCreate: DjsEvents.GuildCreate,
+    GuildDelete: DjsEvents.GuildDelete,
+    GuildEmojiCreate: DjsEvents.GuildEmojiCreate,
+    GuildEmojiDelete: DjsEvents.GuildEmojiDelete,
+    GuildEmojiUpdate: DjsEvents.GuildEmojiUpdate,
+    GuildIntegrationsUpdate: DjsEvents.GuildIntegrationsUpdate,
+    GuildMemberAdd: DjsEvents.GuildMemberAdd,
+    GuildMemberAvailable: DjsEvents.GuildMemberAvailable,
+    GuildMemberRemove: DjsEvents.GuildMemberRemove,
+    GuildMemberUpdate: DjsEvents.GuildMemberUpdate,
+    GuildMembersChunk: DjsEvents.GuildMembersChunk,
+    GuildRoleCreate: DjsEvents.GuildRoleCreate,
+    GuildRoleDelete: DjsEvents.GuildRoleDelete,
+    GuildRoleUpdate: DjsEvents.GuildRoleUpdate,
+    GuildUpdate: DjsEvents.GuildUpdate,
+    InviteCreate: DjsEvents.InviteCreate,
+    InviteDelete: DjsEvents.InviteDelete,
+    MessageBulkDelete: DjsEvents.MessageBulkDelete,
+    MessageCreate: DjsEvents.MessageCreate,
+    MessageDelete: DjsEvents.MessageDelete,
+    MessageReactionAdd: DjsEvents.MessageReactionAdd,
+    MessageReactionRemoveAll: DjsEvents.MessageReactionRemoveAll,
+    MessageReactionRemove: DjsEvents.MessageReactionRemove,
+    MessageUpdate: DjsEvents.MessageUpdate,
+    PresenceUpdate: DjsEvents.PresenceUpdate,
+    Raw: DjsEvents.Raw,
+    ShardDisconnect: DjsEvents.ShardDisconnect,
+    ShardError: DjsEvents.ShardError,
+    ShardReady: DjsEvents.ShardReady,
+    ShardReconnecting: DjsEvents.ShardReconnecting,
+    ShardResume: DjsEvents.ShardResume,
+    TypingStart: DjsEvents.TypingStart,
+    UserUpdate: DjsEvents.UserUpdate,
+    VoiceStateUpdate: DjsEvents.VoiceStateUpdate,
+    Warn: DjsEvents.Warn,
+    WebhooksUpdate: DjsEvents.WebhooksUpdate,
     // #endregion Discord.js base events
 
     // #region Sapphire load cycle events
@@ -138,20 +133,20 @@ export interface SlashCommandSuccessPayload<
 
 declare module 'discord.js' {
     interface ClientEvents {
-        [Events.UnknownSlashCommandName]: [payload: UnknownSlashCommandNamePayload];
-        [Events.UnknownSlashCommand]: [payload: UnknownSlashCommandPayload];
-        [Events.PreSlashCommandRun]: [payload: PreSlashCommandRunPayload];
-        [Events.SlashCommandDenied]: [error: UserError, payload: SlashCommandDeniedPayload];
-        [Events.SlashCommandAccepted]: [payload: SlashCommandAcceptedPayload];
-        [Events.SlashCommandRun]: [
+        unknownSlashCommandName: [payload: UnknownSlashCommandNamePayload];
+        unknownSlashCommand: [payload: UnknownSlashCommandPayload];
+        preSlashCommandRun: [payload: PreSlashCommandRunPayload];
+        slashCommandDenied: [error: UserError, payload: SlashCommandDeniedPayload];
+        slashCommandAccepted: [payload: SlashCommandAcceptedPayload];
+        slashCommandRun: [
             interaction: CommandInteraction,
             command: SlashCommand,
             payload: SlashCommandRunPayload
         ];
-        [Events.SlashCommandSuccess]: [payload: SlashCommandSuccessPayload];
-        [Events.SlashCommandError]: [error: Error, payload: SlashCommandErrorPayload];
-        [Events.ButtonError]: [error: Error, interaction: ButtonInteraction];
-        [Events.SlashCommandFinish]: [
+        slashCommandSuccess: [payload: SlashCommandSuccessPayload];
+        slashCommandError: [error: Error, payload: SlashCommandErrorPayload];
+        buttonError: [error: Error, interaction: ButtonInteraction];
+        slashCommandFinish: [
             interaction: CommandInteraction,
             command: SlashCommand,
             payload: SlashCommandFinishPayload

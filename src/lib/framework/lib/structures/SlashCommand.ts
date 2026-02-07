@@ -1,11 +1,10 @@
-import { AliasPiece, PieceContext, PieceOptions } from '@sapphire/pieces';
-import { Awaited, isNullish } from '@sapphire/utilities';
+import { AliasPiece, type Piece } from '@sapphire/pieces';
+import { isNullish } from '@sapphire/utilities';
 import type {
     CommandInteraction,
     PermissionResolvable,
     CommandInteractionOptionResolver,
-    ApplicationCommandOptionData,
-    ApplicationCommandPermissionData
+    ApplicationCommandOptionData
 } from 'discord.js';
 import {
     CommandOptionsRunType,
@@ -16,15 +15,21 @@ import {
     SlashCommandPreconditionEntryResolvable
 } from '#framework/lib/utils/SlashCommandPreconditionContainerArray';
 
+export interface SlashCommandPermissionData {
+    type: string;
+    id: string;
+    permission: boolean;
+}
+
 export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends AliasPiece {
     public description: string;
     public preconditions: SlashCommandPreconditionContainerArray;
     public arguments: ApplicationCommandOptionData[];
     public guildCommand: boolean;
     public defaultPermission: boolean;
-    public permissions: ApplicationCommandPermissionData[];
+    public permissions: SlashCommandPermissionData[];
 
-    protected constructor(context: PieceContext, options: SlashCommandOptions = {}) {
+    protected constructor(context: Piece.LoaderContext, options: SlashCommandOptions = {}) {
         super(context, { ...options, name: (options.name ?? context.name).toLowerCase() });
         this.description = options.description ?? '';
         this.arguments = options.arguments ?? [];
@@ -38,7 +43,7 @@ export abstract class SlashCommand<T = CommandInteractionOptionResolver> extends
 
     public abstract run(interaction: CommandInteraction, args: T, context: SlashCommandContext): Awaited<unknown>;
 
-    public toJSON(): Record<string, any> {
+    public override toJSON(): ReturnType<AliasPiece['toJSON']> & Record<string, any> {
         return {
             ...super.toJSON(),
             description: this.description,
@@ -194,12 +199,12 @@ export const enum SlashCommandPreConditions {
     NotSafeForWork = 'NSFW'
 }
 
-export interface SlashCommandOptions extends PieceOptions {
+export interface SlashCommandOptions extends AliasPiece.Options {
     arguments?: ApplicationCommandOptionData[];
     description?: string;
     guildCommand?: boolean;
     defaultPermission?: boolean;
-    permissions?: ApplicationCommandPermissionData[];
+    permissions?: SlashCommandPermissionData[];
     preconditions?: readonly SlashCommandPreconditionEntryResolvable[];
     nsfw?: boolean;
     cooldownLimit?: number;

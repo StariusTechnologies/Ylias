@@ -1,6 +1,6 @@
-import { Collection, CommandInteraction, User, MessageActionRow, ButtonInteraction, Message, TextBasedChannels } from 'discord.js';
-import type { MessageButton, WebhookEditMessageOptions } from 'discord.js';
-import type { PieceContext } from '@sapphire/pieces';
+import { Collection, ChatInputCommandInteraction, User, ActionRowBuilder, ButtonInteraction, Message, ButtonBuilder, ButtonStyle, type TextBasedChannel } from 'discord.js';
+import type { WebhookMessageEditOptions } from 'discord.js';
+import type { Piece } from '@sapphire/pieces';
 import { SlashCommand } from '#framework/lib/structures/SlashCommand';
 import { InteractionManager } from '#lib/InteractionManager';
 import { Emotion, Emotions } from '#lib/Emotion';
@@ -10,7 +10,7 @@ interface UserSlotsData {
     attempts: number;
     firstAttemptTime: Date;
     processing: boolean;
-    button?: MessageButton;
+    button?: ButtonBuilder;
 }
 
 export default class SlotsCommand extends SlashCommand {
@@ -87,7 +87,7 @@ export default class SlotsCommand extends SlashCommand {
         ':squid:',
     ];
 
-    constructor(context: PieceContext) {
+    constructor(context: Piece.LoaderContext) {
         super(context, {
             description: `Wanna play slot machines? Well, there is no money implied but it's still fun.`,
         });
@@ -106,7 +106,7 @@ export default class SlotsCommand extends SlashCommand {
         return yearHasPassed || monthHasPassed || dayHasPassed;
     }
 
-    private async playSlots(interaction: CommandInteraction | ButtonInteraction) {
+    private async playSlots(interaction: ChatInputCommandInteraction | ButtonInteraction) {
         const { user } = interaction;
         const userSlotsData = SlotsCommand.usersSlotsData.has(user)
             ? SlotsCommand.usersSlotsData.get(user)
@@ -179,7 +179,7 @@ export default class SlotsCommand extends SlashCommand {
             await interaction.reply({ embeds: [firstEmbed] });
         }
 
-        const editedReply: WebhookEditMessageOptions = { embeds: [secondEmbed] };
+        const editedReply: WebhookMessageEditOptions = { embeds: [secondEmbed] };
 
         await sleep(500);
 
@@ -199,12 +199,12 @@ export default class SlotsCommand extends SlashCommand {
             let { channel } = interaction;
 
             if (!channel) {
-                channel = await interaction.client.channels.fetch(interaction.channelId!) as TextBasedChannels;
+                channel = await interaction.client.channels.fetch(interaction.channelId!) as TextBasedChannel;
             }
 
             userSlotsData!.button = SlotsCommand.interactionManager.getButton({
                 id: `playSlotsAgain${interaction.id}`,
-                style: 'PRIMARY',
+                style: ButtonStyle.Primary,
                 label: 'Play again',
                 emoji: '🔁',
                 channel,
@@ -216,7 +216,7 @@ export default class SlotsCommand extends SlashCommand {
         }
 
         if (!won) {
-            editedReply.components = [new MessageActionRow().addComponents(userSlotsData!.button)];
+            editedReply.components = [new ActionRowBuilder<ButtonBuilder>().addComponents(userSlotsData!.button)];
         }
 
         await sleep(500);
@@ -230,7 +230,7 @@ export default class SlotsCommand extends SlashCommand {
         userSlotsData!.processing = false;
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         await this.playSlots(interaction);
     }
 }

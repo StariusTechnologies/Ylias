@@ -1,12 +1,11 @@
 import Logger from '@lilywonhalf/pretty-logger';
 import { Listener, UserError } from '@sapphire/framework';
-import type { PieceContext } from '@sapphire/pieces';
 import type { ButtonInteraction } from 'discord.js';
 import { Events } from '#lib/framework/lib/types/Events';
 import { Emotion, Emotions } from '#lib/Emotion';
 
 export default class SlashCommandError extends Listener<typeof Events.ButtonError> {
-    constructor(context: PieceContext) {
+    constructor(context: Listener.LoaderContext) {
         super(context, {
             event: Events.ButtonError,
         });

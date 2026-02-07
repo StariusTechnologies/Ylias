@@ -5,7 +5,7 @@ import type {
 } from '#framework/lib/structures/SlashCommandPrecondition';
 import type {
     ISlashCommandPreconditionContainer,
-    SlashCommandPreconditionContainerReturn
+    AsyncSlashCommandPreconditionContainerReturn
 } from '#framework/lib/utils/ISlashCommandPreconditionContainer';
 
 export interface ISlashCommandPreconditionCondition {
@@ -14,12 +14,12 @@ export interface ISlashCommandPreconditionCondition {
         command: SlashCommand,
         entries: readonly ISlashCommandPreconditionContainer[],
         context: SlashCommandPreconditionContext
-    ): SlashCommandPreconditionContainerReturn;
+    ): AsyncSlashCommandPreconditionContainerReturn;
 
     parallel(
         interaction: CommandInteraction,
         command: SlashCommand,
         entries: readonly ISlashCommandPreconditionContainer[],
         context: SlashCommandPreconditionContext
-    ): SlashCommandPreconditionContainerReturn;
+    ): AsyncSlashCommandPreconditionContainerReturn;
 }

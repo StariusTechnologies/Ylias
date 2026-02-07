@@ -1,4 +1,4 @@
-import type { CommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 import { Identifiers } from '#framework/lib/errors/Identifiers';
 import {
     SlashCommandPrecondition,
@@ -6,7 +6,7 @@ import {
 } from '#framework/lib/structures/SlashCommandPrecondition';
 
 export class GuildThreadOnlyPrecondition extends SlashCommandPrecondition {
-    public run(interaction: CommandInteraction): SlashCommandPreconditionResult {
+    public run(interaction: ChatInputCommandInteraction): SlashCommandPreconditionResult {
         return interaction.channel?.isThread()
             ? this.ok()
             : this.error({
