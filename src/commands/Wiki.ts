@@ -2,6 +2,7 @@ import { EmbedBuilder, type AutocompleteInteraction } from 'discord.js';
 import { Command, BucketScope } from '@sapphire/framework';
 import { fetch } from '@sapphire/fetch';
 import { Emotion, Emotions } from '#lib/Emotion';
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class WikiCommand extends Command {
     private static wikipediaLanguages = [
@@ -89,7 +90,7 @@ export default class WikiCommand extends Command {
                 embeds: [Emotion.getEmotionEmbed(Emotions.SAD).setTitle('Wikipedia').setDescription(
                     `Seems like Wikipedia crashed. Didn't think that day would come! Sorry ${interaction.user.username}!`
                 )],
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
 
             return;
@@ -103,7 +104,7 @@ export default class WikiCommand extends Command {
                 embeds: [Emotion.getEmotionEmbed(Emotions.SURPRISE).setTitle('Wikipedia').setDescription(
                     `23 19, WE GOT A 23 19!! Oh, wait, it's a 404, sorry. Well, the page you asked for doesn't exist on Wikipédia. Sorry ${interaction.user.username}!`
                 )],
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
 
             return;

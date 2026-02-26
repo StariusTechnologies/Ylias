@@ -1,6 +1,6 @@
 import { Message, ButtonBuilder, Collection, TextChannel, ButtonStyle } from 'discord.js';
 import { EventEmitter } from 'stream';
-import type { APIPartialEmoji, APIMessage } from 'discord-api-types/v10';
+import { APIPartialEmoji, APIMessage, MessageFlags } from 'discord-api-types/v10';
 import type {
     MessageEditOptions,
     ButtonInteraction,
@@ -119,7 +119,7 @@ export class InteractionManager extends EventEmitter{
             await interaction.reply({
                 content: 'This button doesn\'t do anything anymore! You can try sending the command again.',
                 components: [],
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
 

@@ -45,7 +45,7 @@ export default class MessageCreate extends Listener<typeof Events.MessageCreate>
     }
 
     private handleBotMention(message: Message): void {
-        if (!message.mentions.users.has(message.client.user!.id)) {
+        if (!message.mentions.users.has(message.client.user!.id) || message.guildId !== process.env.TEST_GUILD_ID) {
             return;
         }
 

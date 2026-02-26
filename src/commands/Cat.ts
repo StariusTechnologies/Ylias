@@ -2,6 +2,7 @@ import { Command, BucketScope } from '@sapphire/framework';
 import { fetch } from '@sapphire/fetch';
 import Logger from '@lilywonhalf/pretty-logger';
 import { Emotion, Emotions } from '#lib/Emotion';
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class CatCommand extends Command {
     constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -38,7 +39,7 @@ export default class CatCommand extends Command {
                 .setTitle('No more cats')
                 .setDescription('The random cat API seems to be down at the moment.');
 
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
         }
     }
 }

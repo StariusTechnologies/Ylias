@@ -5,6 +5,7 @@ import Logger from '@lilywonhalf/pretty-logger';
 import { Emotion, Emotions } from '#lib/Emotion';
 import { InteractionManager } from '#lib/InteractionManager';
 import { RatReputation } from '#lib/RatReputation';
+import { MessageFlags } from 'discord-api-types/v10';
 
 const PER_PAGE = 10;
 const MAX_PAGE_RETRIES = 3;
@@ -107,7 +108,7 @@ export default class RatCommand extends Command {
 
                     await buttonInteraction.reply({
                         content: result === 'duplicate' ? 'You already voted for this!' : 'Vote recorded!',
-                        ephemeral: true,
+                        flags: MessageFlags.Ephemeral,
                     });
                 },
             });
@@ -122,7 +123,7 @@ export default class RatCommand extends Command {
 
                     await buttonInteraction.reply({
                         content: result === 'duplicate' ? 'You already voted for this!' : 'Vote recorded!',
-                        ephemeral: true,
+                        flags: MessageFlags.Ephemeral,
                     });
                 },
             });

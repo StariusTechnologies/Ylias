@@ -1,5 +1,6 @@
 import { Command, BucketScope } from '@sapphire/framework';
 import { fetch } from '@sapphire/fetch';
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class AwwCommand extends Command {
     constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -40,7 +41,7 @@ export default class AwwCommand extends Command {
         } else {
             await interaction.reply({
                 content: 'There seem to have been a problem while retrieving an image. Please try again later.',
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
     }

@@ -2,6 +2,7 @@ import { Command, BucketScope } from '@sapphire/framework';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { Emotion, Emotions } from '#lib/Emotion';
 import Logger from '@lilywonhalf/pretty-logger';
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class DogCommand extends Command {
     constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -31,7 +32,7 @@ export default class DogCommand extends Command {
                 .setTitle('No more dogs')
                 .setDescription('The random dog API seems to be down at the moment.');
 
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
         }
     }
 }

@@ -1,6 +1,7 @@
-import { Listener, Events, UserError } from '@sapphire/framework';
 import type { ChatInputCommandDeniedPayload } from '@sapphire/framework';
+import { Events, Listener, UserError } from '@sapphire/framework';
 import { Emotion, Emotions } from '#lib/Emotion';
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class SlashCommandDenied extends Listener<typeof Events.ChatInputCommandDenied> {
     constructor(context: Listener.LoaderContext) {
@@ -18,7 +19,7 @@ export default class SlashCommandDenied extends Listener<typeof Events.ChatInput
 
         await payload.interaction[method]({
             embeds: [embed],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 }

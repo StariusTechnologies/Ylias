@@ -2,6 +2,7 @@ import Logger from '@lilywonhalf/pretty-logger';
 import { Listener, UserError } from '@sapphire/framework';
 import type { ButtonInteraction } from 'discord.js';
 import { Emotion, Emotions } from '#lib/Emotion';
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class ButtonError extends Listener {
     constructor(context: Listener.LoaderContext) {
@@ -29,7 +30,7 @@ export default class ButtonError extends Listener {
 
         await interaction[method]({
             embeds: [embed],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 }

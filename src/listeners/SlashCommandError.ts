@@ -2,6 +2,7 @@ import Logger from '@lilywonhalf/pretty-logger';
 import { Listener, Events } from '@sapphire/framework';
 import type { ChatInputCommandErrorPayload } from '@sapphire/framework';
 import { Emotion, Emotions } from '#lib/Emotion';
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class SlashCommandError extends Listener<typeof Events.ChatInputCommandError> {
     constructor(context: Listener.LoaderContext) {
@@ -32,7 +33,7 @@ export default class SlashCommandError extends Listener<typeof Events.ChatInputC
 
         await payload.interaction[method]({
             embeds: [embed],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 }

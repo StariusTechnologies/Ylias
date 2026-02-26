@@ -1,6 +1,7 @@
 import { Command, BucketScope } from '@sapphire/framework';
 import { fetch } from '@sapphire/fetch';
 import { Emotion, Emotions } from '#lib/Emotion';
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class ImgurCommand extends Command {
     constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -44,7 +45,7 @@ export default class ImgurCommand extends Command {
                 .setTitle('No more images')
                 .setDescription(`Welp... Seems like Imgur API just crashed...`);
 
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
         }
 
         const results = responses.data.filter((response: any) => {
@@ -57,7 +58,7 @@ export default class ImgurCommand extends Command {
                 .setTitle('No results')
                 .setDescription(`Welp... Seems like there is no result for your search...`);
 
-            await interaction.reply({ embeds: [embed], ephemeral: true });
+            await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
         }
 
         const link = result.gifv ?? result.link;
