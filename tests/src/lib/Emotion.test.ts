@@ -1,5 +1,5 @@
 import { Emotion, Emotions } from '#lib/Emotion';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 describe('Testing the Emotion class', () => {
     test('Is correctly formed', () => {
@@ -11,14 +11,14 @@ describe('Testing the Emotion class', () => {
 
     test('Returns the correct values', () => {
         const emotionEmbed = Emotion.getEmotionEmbed(Emotions.WINK).setDescription('test');
-        const addedEmotionEmbed = Emotion.addEmotionToEmbed(new MessageEmbed().setDescription('test'), Emotions.WINK);
+        const addedEmotionEmbed = Emotion.addEmotionToEmbed(new EmbedBuilder().setDescription('test'), Emotions.WINK);
 
         expect(typeof emotionEmbed).toBe('object');
         expect(typeof addedEmotionEmbed).toBe('object');
 
-        expect(emotionEmbed.description).toBe('test');
-        expect(addedEmotionEmbed.description).toBe('test');
-        expect(emotionEmbed.thumbnail?.url).toBe(Emotions.WINK);
-        expect(addedEmotionEmbed.thumbnail?.url).toBe(Emotions.WINK);
+        expect(emotionEmbed.data.description).toBe('test');
+        expect(addedEmotionEmbed.data.description).toBe('test');
+        expect(emotionEmbed.data.thumbnail?.url).toBe(Emotions.WINK);
+        expect(addedEmotionEmbed.data.thumbnail?.url).toBe(Emotions.WINK);
     });
 });

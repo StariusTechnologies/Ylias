@@ -1,16 +1,16 @@
 import Logger from '@lilywonhalf/pretty-logger';
-import { Listener, UserError } from '@sapphire/framework';
-import { Events, SlashCommandErrorPayload } from '#lib/framework/lib/types/Events';
+import { Listener, Events } from '@sapphire/framework';
+import type { ChatInputCommandErrorPayload } from '@sapphire/framework';
 import { Emotion, Emotions } from '#lib/Emotion';
 
-export default class SlashCommandError extends Listener<typeof Events.SlashCommandError> {
+export default class SlashCommandError extends Listener<typeof Events.ChatInputCommandError> {
     constructor(context: Listener.LoaderContext) {
         super(context, {
-            event: Events.SlashCommandError,
+            event: Events.ChatInputCommandError,
         });
     }
 
-    public async run(error: UserError, payload: SlashCommandErrorPayload): Promise<void> {
+    public async run(error: Error, payload: ChatInputCommandErrorPayload): Promise<void> {
         const commandsNotWorthOurTimeAndResources = ['crash'];
         const method = payload.interaction.replied ? 'followUp' : 'reply';
         const embed = Emotion.getEmotionEmbed(Emotions.SAD)
@@ -26,7 +26,7 @@ export default class SlashCommandError extends Listener<typeof Events.SlashComma
                     tag: payload.interaction.user.tag,
                 },
                 name: payload.interaction.commandName,
-                options: (payload.interaction as any).options?.data,
+                options: payload.interaction.options.data,
             });
         }
 

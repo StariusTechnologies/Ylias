@@ -2,16 +2,17 @@ import path from 'path';
 import fs from 'fs';
 import { getPieceContext } from '#mocks/MockInstances';
 
-const slashCommandPreconditionsPath = path.join(__dirname, '..', '..', 'src', 'slash-command-preconditions');
-const slashCommandPreconditionFiles = fs.readdirSync(slashCommandPreconditionsPath)
+const preconditionsPath = path.join(__dirname, '..', '..', 'src', 'preconditions');
+const preconditionFiles = fs.readdirSync(preconditionsPath)
     .filter(filename => filename.endsWith('.ts'))
     .map(filename => filename.substr(0, filename.length - 3));
 
-for (const slashCommandPreconditionFile of slashCommandPreconditionFiles) {
-    describe(`Testing the ${slashCommandPreconditionFile} slash command precondition`, () => {
-        it('Is correctly formed', async () => {
-            const preconditionModuleExports = await import(
-                path.join(slashCommandPreconditionsPath, slashCommandPreconditionFile)
+for (const preconditionFile of preconditionFiles) {
+    describe(`Testing the ${preconditionFile} precondition`, () => {
+        it('Is correctly formed', () => {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const preconditionModuleExports = require(
+                path.join(preconditionsPath, preconditionFile)
             );
             const preconditionClassKey = Object.keys(preconditionModuleExports).find(
                 key => key.toLowerCase().includes('precondition')
@@ -21,11 +22,11 @@ for (const slashCommandPreconditionFile of slashCommandPreconditionFiles) {
 
             const PreconditionClass = preconditionModuleExports[preconditionClassKey!];
             const preconditionObject = new PreconditionClass(
-                getPieceContext(`slash-command-preconditions/${slashCommandPreconditionFile}.ts`)
+                getPieceContext(`preconditions/${preconditionFile}.ts`)
             );
 
             expect(typeof preconditionObject.constructor).toBe('function');
-            expect(typeof preconditionObject.run).toBe('function');
+            expect(typeof preconditionObject.chatInputRun).toBe('function');
         });
     });
 }

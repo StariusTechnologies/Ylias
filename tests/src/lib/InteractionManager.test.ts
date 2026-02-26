@@ -16,9 +16,11 @@ describe('Testing the InteractionManager class', () => {
         const [callback] = interactionManager.listeners(messageButtonData.id);
 
         expect(typeof messageButton).toBe('object');
-        expect(messageButton.customId).toBe(messageButtonData.id);
-        expect(messageButton.style).toBe(messageButtonData.style);
-        expect(messageButton.label).toBe(messageButtonData.label);
+        const buttonData: any = messageButton.data;
+
+        expect(buttonData.custom_id).toBe(messageButtonData.id);
+        expect(buttonData.style).toBe(messageButtonData.style);
+        expect(buttonData.label).toBe(messageButtonData.label);
         expect(typeof callback).toBe('function');
 
         expect(typeof interactionManager.hasListeners(messageButtonData.id)).toBe('boolean');

@@ -4,24 +4,14 @@
   "description": "Yet another Discord Bot",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node .",
+    "start": "npm run compile && node .",
     "compile": "tsc -b src",
     "watch": "npm run compile -- -w",
-    "register-commands-dev": "node dist/command-registration.js",
-    "register-commands-prod": "node dist/command-registration.js prod",
-    "rcd": "npm run register-commands-dev",
-    "rcp": "npm run register-commands-prod",
-    "deploy": "scripts/deploy.sh",
-    "check-config-files": "node scripts/check-config-files.js",
-    "ccf": "npm run check-config-files",
-    "update-config-files": "scripts/update-config-files.sh",
-    "ucf": "npm run update-config-files",
     "test": "jest --no-watchman"
   },
   "imports": {
     "#root/*": "./dist/*.js",
-    "#lib/*": "./dist/lib/*.js",
-    "#framework/*": "./dist/lib/framework/*.js"
+    "#lib/*": "./dist/lib/*.js"
   },
   "repository": {
     "type": "git",
@@ -41,7 +31,6 @@
   },
   "homepage": "https://github.com/StariusTechnologies/Ylias#readme",
   "dependencies": {
-    "@discordjs/rest": "^2.6.0",
     "@lilywonhalf/pretty-logger": "^2.2.1",
     "@sapphire/fetch": "^3.0.5",
     "@sapphire/framework": "^5.5.0",
@@ -50,23 +39,19 @@
     "dotenv": "^16.5.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.0",
-    "@babel/plugin-transform-class-properties": "^7.25.0",
-    "@babel/plugin-proposal-decorators": "^7.25.0",
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-typescript": "^7.26.0",
-    "@sapphire/eslint-config": "^5.0.6",
     "@sapphire/prettier-config": "^2.0.0",
     "@sapphire/ts-config": "^5.0.3",
+    "@stylistic/eslint-plugin": "^5.9.0",
     "@types/jest": "^29.5.0",
     "@types/node": "^22.13.0",
-    "babel-plugin-const-enum": "^1.2.0",
-    "eslint": "^8.57.1",
-    "eslint-plugin-jest": "^28.11.0",
-    "eslint-plugin-jsdoc": "^50.6.0",
+    "eslint": "^9.39.3",
+    "eslint-plugin-jest": "^29.15.0",
+    "eslint-plugin-jsdoc": "^62.7.1",
     "jest": "^29.7.0",
     "jest-mock-random": "^1.1.1",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.56.1"
   }
 }

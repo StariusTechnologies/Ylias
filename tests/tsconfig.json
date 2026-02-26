@@ -3,12 +3,12 @@
     "compilerOptions": {
         "noEmit": true,
         "incremental": false,
+        "isolatedModules": true,
         "baseUrl": ".",
         "paths": {
             "#mocks/*": ["./mocks/*"],
             "#root/*": ["../src/*"],
-            "#lib/*": ["../src/lib/*"],
-            "#framework/*": ["../src/lib/framework/*"]
+            "#lib/*": ["../src/lib/*"]
         }
     },
     "include": [".", "../src/**/*"],

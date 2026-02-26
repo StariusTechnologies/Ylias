@@ -7,8 +7,7 @@
         "baseUrl": ".",
         "paths": {
             "#root/*": ["*"],
-            "#lib/*": ["lib/*"],
-            "#framework/*": ["lib/framework/*"]
+            "#lib/*": ["lib/*"]
         },
         "composite": true
     },

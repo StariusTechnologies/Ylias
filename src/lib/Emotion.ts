@@ -1,11 +1,13 @@
 import { EmbedBuilder } from 'discord.js';
 
+const EMOTION_ROOT_URI = 'https://static.frenchdiscord.com/ylias/emotions';
+
 export enum Emotions {
-    NEUTRAL = 'https://cdn.nostradamus.dev/ylias/emotions/neutral.gif',
-    SAD = 'https://cdn.nostradamus.dev/ylias/emotions/sad.gif',
-    SURPRISE = 'https://cdn.nostradamus.dev/ylias/emotions/surprise.gif',
-    UNAMUSED = 'https://cdn.nostradamus.dev/ylias/emotions/unamused.gif',
-    WINK = 'https://cdn.nostradamus.dev/ylias/emotions/wink.gif'
+    NEUTRAL = `${EMOTION_ROOT_URI}/neutral.gif`,
+    SAD = `${EMOTION_ROOT_URI}/sad.gif`,
+    SURPRISE = `${EMOTION_ROOT_URI}/surprise.gif`,
+    UNAMUSED = `${EMOTION_ROOT_URI}/unamused.gif`,
+    WINK = `${EMOTION_ROOT_URI}/wink.gif`
 }
 
 export class Emotion {

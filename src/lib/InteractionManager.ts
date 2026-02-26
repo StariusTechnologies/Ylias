@@ -9,6 +9,12 @@ import type {
 } from 'discord.js';
 import { MINUTE } from './DateTimeUtils';
 
+declare module 'discord.js' {
+    interface ClientEvents {
+        buttonError: [error: Error, interaction: ButtonInteraction];
+    }
+}
+
 export interface ButtonCreationData {
     id: string;
     style?: ButtonStyle;

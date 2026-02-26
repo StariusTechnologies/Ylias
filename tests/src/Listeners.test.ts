@@ -9,8 +9,9 @@ const listenerFiles = fs.readdirSync(listenersPath)
 
 for (const listenerFile of listenerFiles) {
     describe(`Testing the ${listenerFile} event listener`, () => {
-        it('Is correctly formed', async () => {
-            const { default: ListenerClass } = await import(
+        it('Is correctly formed', () => {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: ListenerClass } = require(
                 path.join(listenersPath, listenerFile)
             );
             const listenerObject = new ListenerClass(
