@@ -1,6 +1,6 @@
 import { BucketScope, Command } from '@sapphire/framework';
 import { Emotion, Emotions } from '#lib/Emotion';
-import { MessageFlags } from "discord-api-types/v10";
+import { MessageFlags } from 'discord-api-types/v10';
 
 export default class CrashCommand extends Command {
     constructor(context: Command.LoaderContext, options: Command.Options) {
