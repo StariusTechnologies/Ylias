@@ -59,13 +59,24 @@ export default class MessageCreate extends Listener<typeof Events.MessageCreate>
     private handleMomMention(message: Message): void {
         const pingsMom = message.mentions.users.has(process.env.MOM as string);
 
-        if (!message.guild || message.author?.id === process.env.MOM || pingsMom) {
+        if (!message.guild || message.author?.id === process.env.MOM || message.author?.id === '861461986084388934' || pingsMom) {
             return;
         }
 
         const mom = message.client.users.cache.get(process.env.MOM as string)!;
         const momMember = message.guild.members.cache.get(mom.id);
-        const cancelWords = ['lildami', 'wolfy', 'lille'];
+        const cancelWords = [
+            'lildami',
+            'wolfy',
+            'wolfieboy',
+            'lille',
+            'hamdoulilah',
+            'hamdoulillah',
+            'alhamdulillah',
+            'alhamdulilah',
+            'alhamdolilah',
+            'hamdulilah',
+        ];
         const searchWords = [
             mom.id,
             mom.username,
