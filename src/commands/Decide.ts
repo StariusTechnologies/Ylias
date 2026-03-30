@@ -32,7 +32,7 @@ export default class DecideCommand extends Command {
         const deliverySentences = [
             `I choose ${choice}!`,
             `${choice}, without a doubt.`,
-            `You kidding, right? Pick ${choice}, obviously!`,
+            `You're kidding, right? Pick ${choice}, obviously!`,
             `To make this choice is a big responsibility. But I'm ready. I pick ${choice}.`,
         ];
         const embed = Emotion.getEmotionEmbed(Emotions.NEUTRAL)
