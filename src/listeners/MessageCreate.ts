@@ -56,7 +56,7 @@ export default class MessageCreate extends Listener<typeof Events.MessageCreate>
         });
     }
 
-    private handleMomMention(message: Message): void {
+    private async handleMomMention(message: Message): Promise<void> {
         const pingsMom = message.mentions.users.has(process.env.MOM as string);
 
         if (!message.guild || message.author?.id === process.env.MOM || message.author?.id === '861461986084388934' || pingsMom) {
@@ -80,6 +80,9 @@ export default class MessageCreate extends Listener<typeof Events.MessageCreate>
         const searchWords = [
             mom.id,
             mom.username,
+            mom.displayName,
+            'ansy',
+            'wonhalf',
             'leel',
             'lil',
             'lyl',
@@ -108,18 +111,19 @@ export default class MessageCreate extends Listener<typeof Events.MessageCreate>
         }
 
         if (found) {
+            const member = await message.guild.members.fetch(message.author.id);
             const channel = message.channel as GuildTextChannel;
             const embed = Emotion.getEmotionEmbed(Emotions.WINK)
                 .setURL(message.url)
                 .setAuthor({
-                    name: message.member!.displayName,
+                    name: member!.displayName,
                     iconURL: message.author.displayAvatarURL(),
                     url: message.url,
                 })
                 .setDescription(message.content)
                 .setFooter({ text: `#${channel.name} in ${message.guild.name}` });
 
-            mom.send({ embeds: [embed] });
+            await mom.send({ embeds: [embed] });
         }
     }
 }
