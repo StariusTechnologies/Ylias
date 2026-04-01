@@ -76,6 +76,10 @@ export default class MessageCreate extends Listener<typeof Events.MessageCreate>
             'alhamdulilah',
             'alhamdolilah',
             'hamdulilah',
+            'wolfcheer',
+            'eventualyl',
+            '9lila',
+            'hamdolilah',
         ];
         const searchWords = [
             mom.id,
