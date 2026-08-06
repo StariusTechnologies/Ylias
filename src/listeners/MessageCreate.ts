@@ -1,9 +1,7 @@
-import { Events, Message, NewsChannel, TextChannel, ThreadChannel } from 'discord.js';
+import { Events, Message } from 'discord.js';
 import { Listener } from '@sapphire/framework';
-import Emojis from '#lib/Emojis';
 import { Emotion, Emotions } from '#lib/Emotion';
 
-type GuildTextChannel = TextChannel | ThreadChannel | NewsChannel;
 let lastIndex: number;
 
 export default class MessageCreate extends Listener<typeof Events.MessageCreate> {
@@ -16,7 +14,6 @@ export default class MessageCreate extends Listener<typeof Events.MessageCreate>
     public run(message: Message): void {
         this.handleAethersyaDM(message);
         this.handleBotMention(message);
-        this.handleMomMention(message);
     }
 
     private handleAethersyaDM(message: Message): void {
@@ -54,80 +51,5 @@ export default class MessageCreate extends Listener<typeof Events.MessageCreate>
         message.reply({
             embeds: [embed.setDescription(`Hello there! It's me, a bot! If you want me to do something for you, you must use my slash commands! Type a slash (/) in the message bar to get a list of them!`)],
         });
-    }
-
-    private async handleMomMention(message: Message): Promise<void> {
-        const pingsMom = message.mentions.users.has(process.env.MOM as string);
-
-        if (!message.guild || message.author?.id === process.env.MOM || message.author?.id === '861461986084388934' || pingsMom) {
-            return;
-        }
-
-        const mom = message.client.users.cache.get(process.env.MOM as string)!;
-        const momMember = message.guild.members.cache.get(mom.id);
-        const cancelWords = [
-            'lildami',
-            'wolfy',
-            'wolfieboy',
-            'lille',
-            'hamdoulilah',
-            'hamdoulillah',
-            'alhamdulillah',
-            'alhamdulilah',
-            'alhamdolilah',
-            'hamdulilah',
-            'wolfcheer',
-            'eventualyl',
-            '9lila',
-            'hamdolilah',
-        ];
-        const searchWords = [
-            mom.id,
-            mom.username,
-            mom.displayName,
-            'ansy',
-            'wonhalf',
-            'leel',
-            'lil',
-            'lyl',
-            'liily',
-            'lielie',
-            'l¡ly',
-            'wolf',
-            `${Emojis.l}${Emojis.i}${Emojis.l}${Emojis.y}`,
-            `${Emojis.l} ${Emojis.i} ${Emojis.l} ${Emojis.y}`,
-        ];
-
-        if (momMember && momMember.nickname) {
-            searchWords.push(momMember.nickname);
-        }
-
-        for (const cancelWord of cancelWords) {
-            if (message.content.toLowerCase().includes(cancelWord)) {
-                return;
-            }
-        }
-
-        let found = false;
-
-        for (const searchWord of searchWords) {
-            found = found || message.content.toLowerCase().includes(searchWord);
-        }
-
-        if (found) {
-            const member = await message.guild.members.fetch(message.author.id);
-            const channel = message.channel as GuildTextChannel;
-            const embed = Emotion.getEmotionEmbed(Emotions.WINK)
-                .setURL(message.url)
-                .setAuthor({
-                    name: member!.displayName,
-                    iconURL: message.author.displayAvatarURL(),
-                    url: message.url,
-                })
-                .setDescription(message.content)
-                .setFooter({ text: `#${channel.name} in ${message.guild.name}` });
-
-            await mom.send({ embeds: [embed] });
-        }
     }
 }
